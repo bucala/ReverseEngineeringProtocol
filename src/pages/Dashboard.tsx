@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Typography,
@@ -16,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/store/projectStore'
 import type { ProjectStatus } from '@/types'
+import ImportDialog from '@/components/project/ImportDialog'
 
 const STATUS_COLORS: Record<ProjectStatus, 'default' | 'warning' | 'info' | 'success' | 'error'> = {
   draft: 'default',
@@ -29,6 +31,7 @@ export default function Dashboard() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { projects, setActiveProject, createProject } = useProjectStore()
+  const [importOpen, setImportOpen] = useState(false)
 
   const handleNewProject = () => {
     createProject()
@@ -89,10 +92,9 @@ export default function Dashboard() {
           variant="outlined"
           size="large"
           startIcon={<FileUploadIcon />}
-          component="label"
+          onClick={() => setImportOpen(true)}
         >
           {t('project.importProject')}
-          <input type="file" accept=".reproj" hidden onChange={() => {/* handled in ImportDialog */}} />
         </Button>
       </Stack>
 
@@ -145,6 +147,8 @@ export default function Dashboard() {
           ))}
         </Grid>
       )}
+
+      <ImportDialog open={importOpen} onClose={() => setImportOpen(false)} />
     </Box>
   )
 }

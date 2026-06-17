@@ -11,6 +11,20 @@ const baseTokens: ThemeOptions = {
   },
   shape: { borderRadius: 8 },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        * {
+          -webkit-user-select: none;
+          user-select: none;
+        }
+        input,
+        textarea,
+        [contenteditable="true"] {
+          -webkit-user-select: text;
+          user-select: text;
+        }
+      `,
+    },
     MuiCard: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
