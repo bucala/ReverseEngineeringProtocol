@@ -193,7 +193,8 @@ export interface Project {
   updatedAt: string   // ISO date string
   realizator: CompanyProfile | null
   ziadatel: CompanyProfile | null
-  objectSpec: ObjectSpec
+  objectSpec?: ObjectSpec        // legacy – migrated to objectSpecs on load
+  objectSpecs: ObjectSpec[]
   meshAssessment: MeshAssessment
   reCadPostprocessing: RECadPostprocessing
   timeEstimation: TimeEstimation

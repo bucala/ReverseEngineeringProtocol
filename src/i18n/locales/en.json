@@ -108,7 +108,9 @@
     "dimensionZ": "Dimension Z",
     "unit": "Unit",
     "notes": "Object Description / Notes",
-    "removeImage": "Remove Image"
+    "removeImage": "Remove Image",
+    "addObject": "Add object / part / assembly",
+    "objectIndex": "Object {{n}}"
   },
   "rePurpose": {
     "title": "Purpose of Reverse Engineering",

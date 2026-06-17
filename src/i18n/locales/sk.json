@@ -108,7 +108,9 @@
     "dimensionZ": "Rozmery Z",
     "unit": "Jednotka",
     "notes": "Popis / poznámky k objektu",
-    "removeImage": "Odstrániť obrázok"
+    "removeImage": "Odstrániť obrázok",
+    "addObject": "Pridať objekt / súčiastku / zostavu",
+    "objectIndex": "Objekt {{n}}"
   },
   "rePurpose": {
     "title": "Účel reverzného inžinierstva",

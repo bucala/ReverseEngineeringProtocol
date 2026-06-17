@@ -2,13 +2,11 @@ import { useState } from 'react'
 import {
   Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardActionArea,
   Button,
   Chip,
   Stack,
+  ButtonBase,
+  Divider,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import FileUploadIcon from '@mui/icons-material/FileUpload'
@@ -38,114 +36,66 @@ export default function Dashboard() {
     navigate('/projects/new')
   }
 
-  const stats = {
-    total: projects.length,
-    draft: projects.filter((p) => p.status === 'draft').length,
-    completed: projects.filter((p) => p.status === 'completed').length,
-  }
+  const total = projects.length
+  const draft = projects.filter((p) => p.status === 'draft' || p.status === 'in_review').length
+  const completed = projects.filter((p) => p.status === 'completed').length
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        {t('nav.dashboard')}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        {t('app.tagline')}
-      </Typography>
-
-      {/* Stats row */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        {[
-          { label: t('dashboard.stats.total'), value: stats.total, color: 'primary.main' },
-          { label: t('dashboard.stats.draft'), value: stats.draft, color: 'warning.main' },
-          { label: t('dashboard.stats.completed'), value: stats.completed, color: 'success.main' },
-        ].map((stat) => (
-          <Grid item xs={12} sm={4} key={stat.label}>
-            <Card>
-              <CardContent sx={{ textAlign: 'center', py: 3 }}>
-                <Typography variant="h3" sx={{ color: stat.color, fontWeight: 700 }}>
-                  {stat.value}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {stat.label}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Quick actions */}
-      <Typography variant="h6" gutterBottom>
-        {t('dashboard.quickActions')}
-      </Typography>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4 }}>
-        <Button
-          variant="contained"
-          size="large"
-          startIcon={<AddIcon />}
-          onClick={handleNewProject}
-        >
+      {/* Compact action row + inline stats */}
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }} flexWrap="wrap" gap={1}>
+        <Button variant="contained" size="small" startIcon={<AddIcon />} onClick={handleNewProject}>
           {t('project.newProject')}
         </Button>
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<FileUploadIcon />}
-          onClick={() => setImportOpen(true)}
-        >
-          {t('project.importProject')}
+        <Button variant="outlined" size="small" startIcon={<FileUploadIcon />} onClick={() => setImportOpen(true)}>
+          {t('common.import')}
         </Button>
+        <Box sx={{ flex: 1 }} />
+        <Stack direction="row" spacing={0.5}>
+          <Chip size="small" label={`${total} projektov`} />
+          {draft > 0 && <Chip size="small" label={`${draft} aktívne`} color="warning" variant="outlined" />}
+          {completed > 0 && <Chip size="small" label={`${completed} hotovo`} color="success" variant="outlined" />}
+        </Stack>
       </Stack>
 
-      {/* Recent projects */}
-      <Typography variant="h6" gutterBottom>
-        {t('dashboard.recentProjects')}
-      </Typography>
+      <Divider sx={{ mb: 1.5 }} />
 
+      {/* Project list */}
       {projects.length === 0 ? (
-        <Card sx={{ p: 4, textAlign: 'center' }}>
-          <FolderOpenIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
-          <Typography color="text.secondary">{t('project.noProjects')}</Typography>
-        </Card>
+        <Stack alignItems="center" sx={{ py: 6, color: 'text.disabled' }}>
+          <FolderOpenIcon sx={{ fontSize: 40, mb: 1 }} />
+          <Typography variant="body2">{t('project.noProjects')}</Typography>
+        </Stack>
       ) : (
-        <Grid container spacing={2}>
-          {projects.map((project) => (
-            <Grid item xs={12} sm={6} md={4} key={project.id}>
-              <Card>
-                <CardActionArea
-                  onClick={() => {
-                    setActiveProject(project.id)
-                    navigate(`/projects/${project.id}`)
-                  }}
-                  sx={{ p: 2 }}
-                >
-                  <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                    <Typography variant="subtitle1" noWrap sx={{ maxWidth: '70%' }}>
+        <Box>
+          {projects.map((project, idx) => (
+            <Box key={project.id}>
+              <ButtonBase
+                sx={{ width: '100%', textAlign: 'left', display: 'block', px: 0.5, py: 1, borderRadius: 1,
+                  '&:hover': { bgcolor: 'action.hover' } }}
+                onClick={() => { setActiveProject(project.id); navigate(`/projects/${project.id}`) }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography variant="body2" fontWeight={500} noWrap>
                       {project.title || project.protocolNumber}
                     </Typography>
-                    <Chip
-                      label={t(`project.statuses.${project.status}`)}
-                      color={STATUS_COLORS[project.status]}
-                      size="small"
-                    />
-                  </Stack>
-                  <Typography variant="caption" color="text.secondary" display="block">
-                    {project.protocolNumber}
-                  </Typography>
-                  {project.ziadatel && (
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {project.ziadatel.name}
+                    <Typography variant="caption" color="text.disabled">
+                      {project.protocolNumber} · {new Date(project.updatedAt).toLocaleDateString()}
                     </Typography>
-                  )}
-                  <Typography variant="caption" color="text.disabled" display="block" sx={{ mt: 1 }}>
-                    {new Date(project.updatedAt).toLocaleDateString()}
-                  </Typography>
-                </CardActionArea>
-              </Card>
-            </Grid>
+                  </Box>
+                  <Chip
+                    label={t(`project.statuses.${project.status}`)}
+                    color={STATUS_COLORS[project.status]}
+                    size="small"
+                    sx={{ flexShrink: 0 }}
+                  />
+                </Stack>
+              </ButtonBase>
+              {idx < projects.length - 1 && <Divider />}
+            </Box>
           ))}
-        </Grid>
+        </Box>
       )}
 
       <ImportDialog open={importOpen} onClose={() => setImportOpen(false)} />

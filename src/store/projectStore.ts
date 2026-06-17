@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Project } from '@/types'
-import { createDefaultProject } from './defaults'
+import { createDefaultProject, defaultObjectSpec } from './defaults'
 
 interface ProjectState {
   projects: Project[]
@@ -87,7 +87,20 @@ export const useProjectStore = create<ProjectState>()(
     }),
     {
       name: 'reveng_projects',
+      version: 1,
       storage: createJSONStorage(() => localStorage),
+      migrate: (state: unknown, version: number) => {
+        const s = state as { projects?: any[] }
+        if (version < 1) {
+          s.projects = (s.projects ?? []).map((p: any) => {
+            if (!p.objectSpecs) {
+              return { ...p, objectSpecs: p.objectSpec ? [p.objectSpec] : [defaultObjectSpec()] }
+            }
+            return p
+          })
+        }
+        return s as any
+      },
     }
   )
 )

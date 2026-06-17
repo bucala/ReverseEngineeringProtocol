@@ -98,7 +98,7 @@ export default function ProjectEditor() {
 
   const stepContent = [
     <ProjectHeader key="header" project={project} profiles={profiles} onChange={handleUpdate} />,
-    <ObjectSpecModule key="object" value={project.objectSpec} onChange={(v) => handleUpdate({ objectSpec: v })} />,
+    <ObjectSpecModule key="object" value={project.objectSpecs} onChange={(v) => handleUpdate({ objectSpecs: v })} />,
     <MeshAssessmentModule key="mesh" value={project.meshAssessment} onChange={(v) => handleUpdate({ meshAssessment: v })} />,
     <RECadModule key="recad" value={project.reCadPostprocessing} onChange={(v) => handleUpdate({ reCadPostprocessing: v })} />,
     <TimeEstimationModule key="time" value={project.timeEstimation} mesh={project.meshAssessment} recad={project.reCadPostprocessing} onChange={(v) => handleUpdate({ timeEstimation: v })} />,

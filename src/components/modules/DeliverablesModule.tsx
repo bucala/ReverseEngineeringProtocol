@@ -192,15 +192,19 @@ export default function DeliverablesModule({ value, onChange }: Props) {
           />
         </Grid>
 
-        {/* Deadline */}
-        <Grid item xs={12} md={4}>
+        {/* Deadline – year only */}
+        <Grid item xs={12} md={2}>
           <TextField
             label={t('deliverables.deadline')}
-            type="date"
+            type="number"
             value={value.deadline ?? ''}
-            onChange={(e) => set('deadline', e.target.value || null)}
+            onChange={(e) => {
+              const v = e.target.value
+              set('deadline', v ? v : null)
+            }}
+            inputProps={{ min: 2020, max: 2099, step: 1 }}
+            placeholder={String(new Date().getFullYear())}
             fullWidth
-            InputLabelProps={{ shrink: true }}
           />
         </Grid>
 

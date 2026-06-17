@@ -108,7 +108,9 @@
     "dimensionZ": "Abmessung Z",
     "unit": "Einheit",
     "notes": "Objektbeschreibung / Notizen",
-    "removeImage": "Bild entfernen"
+    "removeImage": "Bild entfernen",
+    "addObject": "Objekt / Bauteil / Baugruppe hinzufügen",
+    "objectIndex": "Objekt {{n}}"
   },
   "rePurpose": {
     "title": "Zweck des Reverse Engineerings",
