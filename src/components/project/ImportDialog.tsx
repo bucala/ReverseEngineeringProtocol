@@ -21,6 +21,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useProjectStore } from '@/store/projectStore'
+import { useCompanyStore } from '@/store/companyStore'
 import { importReproj } from '@/utils/fileFormat'
 
 interface Props {
@@ -32,6 +33,7 @@ export default function ImportDialog({ open, onClose }: Props) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { importProject } = useProjectStore()
+  const { importProjectProfiles } = useCompanyStore()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [file, setFile] = useState<File | null>(null)
@@ -55,6 +57,9 @@ export default function ImportDialog({ open, onClose }: Props) {
     try {
       const payload = await importReproj(file, password)
       importProject(payload.project)
+      if (payload.companyProfiles?.length) {
+        importProjectProfiles(payload.companyProfiles)
+      }
       handleClose()
       navigate(`/projects/${payload.project.id}`)
     } catch {

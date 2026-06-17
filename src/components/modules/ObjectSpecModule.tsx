@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Alert,
   Grid,
   TextField,
   Select,
@@ -37,6 +38,7 @@ const UNITS = ['mm', 'cm', 'm', 'inch'] as const
 const RE_PURPOSES: REPurpose[] = ['spare_part', 'design_innovation', 'archiving', 'documentation', 'inspection', 'other']
 
 const MAX_MODEL_SIZE = 15 * 1024 * 1024 // 15 MB
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024  // 5 MB
 
 const emptySpec = (): ObjectSpec => ({
   name: '',
@@ -55,17 +57,21 @@ const emptySpec = (): ObjectSpec => ({
 
 function ImageDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: ObjectSpec) => void }) {
   const { t } = useTranslation()
+  const [sizeWarning, setSizeWarning] = useState(0)
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const newImages: ObjectImage[] = []
+      let skipped = 0
       for (const file of acceptedFiles) {
+        if (file.size > MAX_IMAGE_SIZE) { skipped++; continue }
         try {
           const dataBase64 = await readFileAsDataURL(file)
           newImages.push({ id: uuidv4(), dataBase64, mimeType: file.type, description: file.name, takenAt: null })
         } catch { /* skip */ }
       }
-      onChange({ ...spec, images: [...spec.images, ...newImages] })
+      setSizeWarning(skipped)
+      if (newImages.length > 0) onChange({ ...spec, images: [...spec.images, ...newImages] })
     },
     [spec, onChange]
   )
@@ -101,6 +107,11 @@ function ImageDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: Obj
           {t('object.uploadImages')}
         </Typography>
       </Box>
+      {sizeWarning > 0 && (
+        <Alert severity="warning" sx={{ mt: 1 }} onClose={() => setSizeWarning(0)}>
+          {sizeWarning} {t('object.imagesTooLarge')} (max 5 MB)
+        </Alert>
+      )}
       {spec.images.length > 0 && (
         <Stack direction="row" flexWrap="wrap" gap={1.5} sx={{ mt: 1.5 }}>
           {spec.images.map((img) => (

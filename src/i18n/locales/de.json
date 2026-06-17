@@ -108,6 +108,7 @@
     "dimensionZ": "Abmessung Z",
     "unit": "Einheit",
     "notes": "Objektbeschreibung / Notizen",
+    "imagesTooLarge": "Bild(er) überschreiten 5 MB und wurden nicht hochgeladen",
     "removeImage": "Bild entfernen",
     "addObject": "Objekt / Bauteil / Baugruppe hinzufügen",
     "objectIndex": "Objekt {{n}}",

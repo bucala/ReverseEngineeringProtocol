@@ -108,6 +108,7 @@
     "dimensionZ": "Dimension Z",
     "unit": "Unit",
     "notes": "Object Description / Notes",
+    "imagesTooLarge": "image(s) exceeded 5 MB and were not uploaded",
     "removeImage": "Remove Image",
     "addObject": "Add object / part / assembly",
     "objectIndex": "Object {{n}}",
