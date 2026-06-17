@@ -1,0 +1,231 @@
+{
+  "app": {
+    "title": "RevEng Protocol Manager",
+    "tagline": "Reverse Engineering Protokollverwaltung"
+  },
+  "nav": {
+    "dashboard": "Übersicht",
+    "newProject": "Neues Projekt",
+    "projects": "Projekte",
+    "companyProfiles": "Unternehmensprofile",
+    "settings": "Einstellungen"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "yes": "Ja",
+    "no": "Nein",
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "warning": "Warnung",
+    "info": "Information",
+    "required": "Pflichtfeld",
+    "optional": "Optional",
+    "hours": "Stunden",
+    "eur": "EUR",
+    "percentage": "%",
+    "mm": "mm",
+    "cm": "cm",
+    "m": "m",
+    "inch": "Zoll",
+    "notes": "Notizen",
+    "next": "Weiter",
+    "back": "Zurück",
+    "finish": "Fertigstellen",
+    "preview": "Vorschau",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "total": "Gesamt",
+    "subtotal": "Zwischensumme"
+  },
+  "project": {
+    "title": "Projekttitel",
+    "protocolNumber": "Protokollnummer",
+    "status": "Status",
+    "createdAt": "Erstellt am",
+    "updatedAt": "Aktualisiert am",
+    "internalNotes": "Interne Notizen",
+    "statuses": {
+      "draft": "Entwurf",
+      "in_review": "In Prüfung",
+      "approved": "Genehmigt",
+      "completed": "Abgeschlossen",
+      "archived": "Archiviert"
+    },
+    "newProject": "Neues Projekt",
+    "saveProject": "Projekt speichern",
+    "exportProject": "Projekt exportieren (.reproj)",
+    "importProject": "Projekt importieren (.reproj)",
+    "deleteProject": "Projekt löschen",
+    "deleteConfirm": "Möchten Sie dieses Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "noProjects": "Noch keine Projekte. Erstellen Sie ein neues Projekt."
+  },
+  "company": {
+    "title": "Unternehmensprofil",
+    "realizator": "Auftragnehmer (Realizátor)",
+    "ziadatel": "Auftraggeber (Žiadateľ)",
+    "name": "Unternehmensname",
+    "address": "Adresse",
+    "city": "Stadt",
+    "zip": "PLZ",
+    "country": "Land",
+    "ico": "Unternehmens-ID (IČO)",
+    "dic": "Steuer-ID (DIČ)",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "website": "Website",
+    "contactPerson": "Ansprechpartner",
+    "logo": "Unternehmenslogo",
+    "uploadLogo": "Logo hochladen",
+    "removeLogo": "Logo entfernen",
+    "exportProfiles": "Profile exportieren",
+    "importProfiles": "Profile importieren",
+    "addProfile": "Profil hinzufügen",
+    "editProfile": "Profil bearbeiten",
+    "deleteProfile": "Profil löschen",
+    "setAsDefault": "Als Standard-Auftragnehmer festlegen",
+    "noProfiles": "Keine Unternehmensprofile vorhanden."
+  },
+  "object": {
+    "title": "Objektspezifikation",
+    "name": "Bauteil- / Baugruppename",
+    "partNumber": "Teilenummer",
+    "material": "Material",
+    "images": "Bilder / Fotos",
+    "uploadImages": "Bilder hochladen",
+    "imageDescription": "Bildbeschreibung",
+    "boundingBox": "Begrenzungsrahmen (Bounding Box)",
+    "dimensionX": "Abmessung X",
+    "dimensionY": "Abmessung Y",
+    "dimensionZ": "Abmessung Z",
+    "unit": "Einheit",
+    "notes": "Objektbeschreibung / Notizen",
+    "removeImage": "Bild entfernen"
+  },
+  "mesh": {
+    "title": "Scan-Bewertung (Mesh Assessment)",
+    "scanningDifficulty": "Scanschwierigkeit",
+    "difficulties": {
+      "easy": "Einfach",
+      "medium": "Mittel",
+      "hard": "Schwierig",
+      "extreme": "Extrem"
+    },
+    "surfaceFinish": "Oberflächenbeschaffenheit",
+    "surfaces": {
+      "matte": "Matt",
+      "glossy": "Glänzend",
+      "reflective": "Spiegelnd / Reflektierend",
+      "transparent": "Transparent / Durchscheinend",
+      "mixed": "Gemischt"
+    },
+    "surfacePrepRequired": "Oberflächenvorbereitung erforderlich",
+    "surfacePrepMethod": "Vorbereitungsmethode",
+    "geometryComplexity": "Geometriekomplexität",
+    "complexities": {
+      "simple": "Einfach",
+      "moderate": "Mittel",
+      "complex": "Komplex",
+      "freeform": "Freiform"
+    },
+    "hasUndercutFeatures": "Hinterschnitte vorhanden",
+    "hasInternalFeatures": "Interne Geometrien (Hohlräume, Kanäle)",
+    "estimatedScanningHours": "Geschätzte Scanzeit (h)",
+    "notes": "Notizen zum Scannen"
+  },
+  "recad": {
+    "title": "RE & CAD-Nachbearbeitung",
+    "strategy": "Verarbeitungsstrategie",
+    "strategies": {
+      "as_built": "As-Built (Ist-Zustand)",
+      "design_intent": "Design Intent (Konstruktionsabsicht)"
+    },
+    "surfacingMethod": "Flächenmodellierungsmethode",
+    "methods": {
+      "auto_surfacing": "Automatische Flächenmodellierung",
+      "parametric_solid": "Parametrisches Volumenmodell",
+      "hybrid": "Hybrid (kombiniert)"
+    },
+    "featureBasedModeling": "Feature-basierte Modellierung",
+    "sketches2D": "2D-Skizzen & Abhängigkeiten",
+    "drawingRequired": "Technische Zeichnung erforderlich",
+    "toleranceAnalysis": "Toleranzanalyse",
+    "selectedCadFormats": "Ausgabe-CAD-Formate",
+    "estimatedCadHours": "Geschätzte CAD-Bearbeitungszeit (h)",
+    "notes": "Notizen zur CAD-Nachbearbeitung"
+  },
+  "time": {
+    "title": "Zeit- und Kostenkalkulation",
+    "mode": "Kalkulationsmodus",
+    "modes": {
+      "auto": "Automatisch (aus Modulen)",
+      "manual": "Manuelle Eingabe"
+    },
+    "currency": "Währung",
+    "scanning": "Scannen",
+    "meshProcessing": "Mesh-Verarbeitung",
+    "cad": "CAD-Verarbeitung",
+    "inspection": "Inspektion",
+    "management": "Projektmanagement",
+    "travel": "Reise",
+    "overhead": "Gemeinkosten (%)",
+    "discount": "Rabatt (%)",
+    "ratePerHour": "Stundensatz (€/h)",
+    "totalHours": "Gesamtzeit (h)",
+    "subtotal": "Zwischensumme",
+    "totalCost": "Gesamtkosten"
+  },
+  "deliverables": {
+    "title": "Lieferobjekte",
+    "rawMeshFormats": "Rohe Mesh-Daten",
+    "optimizedMeshFormats": "Optimierte Mesh-Daten",
+    "cadFormats": "CAD-Dateien",
+    "inspectionFormats": "Inspektionsberichte",
+    "cloudUpload": "Cloud-Upload",
+    "physicalMedia": "Physisches Medium (USB / DVD)",
+    "deliveryNotes": "Lieferhinweise",
+    "deadline": "Lieferfrist"
+  },
+  "security": {
+    "title": "Exportsicherheit",
+    "password": "Verschlüsselungspasswort",
+    "confirmPassword": "Passwort bestätigen",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "passwordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
+    "decryptPassword": "Entschlüsselungspasswort",
+    "incorrectPassword": "Falsches Passwort oder beschädigte Datei",
+    "encryptionInfo": "Die Datei wird mit AES-256-GCM verschlüsselt"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Anwendungssprache",
+    "theme": "Design",
+    "themes": {
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "defaultRealizator": "Standard-Auftragnehmer"
+  },
+  "dashboard": {
+    "recentProjects": "Zuletzt bearbeitet",
+    "quickActions": "Schnellaktionen",
+    "stats": {
+      "total": "Projekte gesamt",
+      "draft": "Entwürfe",
+      "completed": "Abgeschlossen"
+    }
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Ungültige E-Mail-Adresse",
+    "invalidPhone": "Ungültige Telefonnummer",
+    "positiveNumber": "Muss eine positive Zahl sein",
+    "maxLength": "Maximale Länge beträgt {{max}} Zeichen"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "app": {
+    "title": "RevEng Protocol Manager",
+    "tagline": "Správa protokolov reverzného inžinierstva"
+  },
+  "nav": {
+    "dashboard": "Prehľad",
+    "newProject": "Nový projekt",
+    "projects": "Projekty",
+    "companyProfiles": "Profily spoločností",
+    "settings": "Nastavenia"
+  },
+  "common": {
+    "save": "Uložiť",
+    "cancel": "Zrušiť",
+    "delete": "Vymazať",
+    "edit": "Upraviť",
+    "add": "Pridať",
+    "close": "Zavrieť",
+    "confirm": "Potvrdiť",
+    "yes": "Áno",
+    "no": "Nie",
+    "loading": "Načítava sa...",
+    "error": "Chyba",
+    "success": "Úspech",
+    "warning": "Upozornenie",
+    "info": "Informácia",
+    "required": "Povinné pole",
+    "optional": "Voliteľné",
+    "hours": "hodín",
+    "eur": "EUR",
+    "percentage": "%",
+    "mm": "mm",
+    "cm": "cm",
+    "m": "m",
+    "inch": "palec",
+    "notes": "Poznámky",
+    "next": "Ďalej",
+    "back": "Späť",
+    "finish": "Dokončiť",
+    "preview": "Náhľad",
+    "export": "Exportovať",
+    "import": "Importovať",
+    "total": "Celkom",
+    "subtotal": "Medzisúčet"
+  },
+  "project": {
+    "title": "Názov projektu",
+    "protocolNumber": "Číslo protokolu",
+    "status": "Stav",
+    "createdAt": "Vytvorené",
+    "updatedAt": "Aktualizované",
+    "internalNotes": "Interné poznámky",
+    "statuses": {
+      "draft": "Návrh",
+      "in_review": "V kontrole",
+      "approved": "Schválené",
+      "completed": "Dokončené",
+      "archived": "Archivované"
+    },
+    "newProject": "Nový projekt",
+    "saveProject": "Uložiť projekt",
+    "exportProject": "Exportovať projekt (.reproj)",
+    "importProject": "Importovať projekt (.reproj)",
+    "deleteProject": "Vymazať projekt",
+    "deleteConfirm": "Naozaj chcete vymazať tento projekt? Táto akcia je nenávratná.",
+    "noProjects": "Zatiaľ žiadne projekty. Vytvorte nový projekt."
+  },
+  "company": {
+    "title": "Profil spoločnosti",
+    "realizator": "Realizátor",
+    "ziadatel": "Žiadateľ",
+    "name": "Názov spoločnosti",
+    "address": "Adresa",
+    "city": "Mesto",
+    "zip": "PSČ",
+    "country": "Krajina",
+    "ico": "IČO",
+    "dic": "DIČ",
+    "phone": "Telefón",
+    "email": "E-mail",
+    "website": "Web",
+    "contactPerson": "Kontaktná osoba",
+    "logo": "Logo spoločnosti",
+    "uploadLogo": "Nahrať logo",
+    "removeLogo": "Odstrániť logo",
+    "exportProfiles": "Exportovať profily",
+    "importProfiles": "Importovať profily",
+    "addProfile": "Pridať profil",
+    "editProfile": "Upraviť profil",
+    "deleteProfile": "Vymazať profil",
+    "setAsDefault": "Nastaviť ako predvolený realizátor",
+    "noProfiles": "Žiadne profily spoločností."
+  },
+  "object": {
+    "title": "Špecifikácia objektu",
+    "name": "Názov dielca / zostavy",
+    "partNumber": "Číslo dielca",
+    "material": "Materiál",
+    "images": "Obrázky / fotografie",
+    "uploadImages": "Nahrať obrázky",
+    "imageDescription": "Popis obrázka",
+    "boundingBox": "Ohraničujúci box (Bounding Box)",
+    "dimensionX": "Rozmery X",
+    "dimensionY": "Rozmery Y",
+    "dimensionZ": "Rozmery Z",
+    "unit": "Jednotka",
+    "notes": "Popis / poznámky k objektu",
+    "removeImage": "Odstrániť obrázok"
+  },
+  "mesh": {
+    "title": "Hodnotenie skenovania (Mesh Assessment)",
+    "scanningDifficulty": "Obtiažnosť skenovania",
+    "difficulties": {
+      "easy": "Ľahká",
+      "medium": "Stredná",
+      "hard": "Náročná",
+      "extreme": "Extrémna"
+    },
+    "surfaceFinish": "Povrch dielca",
+    "surfaces": {
+      "matte": "Matný",
+      "glossy": "Lesklý",
+      "reflective": "Zrkadlový / reflexný",
+      "transparent": "Priehľadný / priesvitný",
+      "mixed": "Kombinovaný"
+    },
+    "surfacePrepRequired": "Vyžaduje sa príprava povrchu",
+    "surfacePrepMethod": "Metóda prípravy povrchu",
+    "geometryComplexity": "Zložitosť geometrie",
+    "complexities": {
+      "simple": "Jednoduchá",
+      "moderate": "Stredná",
+      "complex": "Zložitá",
+      "freeform": "Voľný tvar (freeform)"
+    },
+    "hasUndercutFeatures": "Podbrusné plochy / podrezy",
+    "hasInternalFeatures": "Interné geometrie (dutiny, kanály)",
+    "estimatedScanningHours": "Odhadovaný čas skenovania (h)",
+    "notes": "Poznámky k skenovaniu"
+  },
+  "recad": {
+    "title": "RE & CAD postprocessing",
+    "strategy": "Stratégia spracovania",
+    "strategies": {
+      "as_built": "As-Built (skutočný stav)",
+      "design_intent": "Design Intent (zámer konštrukcie)"
+    },
+    "surfacingMethod": "Metóda plošného modelovania",
+    "methods": {
+      "auto_surfacing": "Automatické plošné modelovanie",
+      "parametric_solid": "Parametrické objemové modelovanie",
+      "hybrid": "Hybridné (kombinované)"
+    },
+    "featureBasedModeling": "Feature-based modelovanie",
+    "sketches2D": "2D náčrty a väzby",
+    "drawingRequired": "Technický výkres požadovaný",
+    "toleranceAnalysis": "Tolerančná analýza",
+    "selectedCadFormats": "Výstupné CAD formáty",
+    "estimatedCadHours": "Odhadovaný čas CAD spracovania (h)",
+    "notes": "Poznámky k CAD postprocessingu"
+  },
+  "time": {
+    "title": "Kalkulácia času a nákladov",
+    "mode": "Režim kalkulácie",
+    "modes": {
+      "auto": "Automatický (z moduldov)",
+      "manual": "Manuálny vstup"
+    },
+    "currency": "Mena",
+    "scanning": "Skenovanie",
+    "meshProcessing": "Spracovanie mesh",
+    "cad": "CAD spracovanie",
+    "inspection": "Inšpekcia",
+    "management": "Riadenie projektu",
+    "travel": "Cestovné",
+    "overhead": "Réžia (%)",
+    "discount": "Zľava (%)",
+    "ratePerHour": "Sadzba (€/h)",
+    "totalHours": "Celkový čas (h)",
+    "subtotal": "Medzisúčet",
+    "totalCost": "Celkové náklady"
+  },
+  "deliverables": {
+    "title": "Špecifikácia odovzdávky",
+    "rawMeshFormats": "Surové mesh dáta",
+    "optimizedMeshFormats": "Optimalizované mesh dáta",
+    "cadFormats": "CAD súbory",
+    "inspectionFormats": "Inšpekčné protokoly",
+    "cloudUpload": "Nahrať do cloudu",
+    "physicalMedia": "Fyzické médium (USB / DVD)",
+    "deliveryNotes": "Poznámky k odovzdávke",
+    "deadline": "Termín odovzdania"
+  },
+  "security": {
+    "title": "Zabezpečenie exportu",
+    "password": "Heslo pre šifrovanie",
+    "confirmPassword": "Potvrdiť heslo",
+    "passwordMismatch": "Heslá sa nezhodujú",
+    "passwordTooShort": "Heslo musí mať aspoň 8 znakov",
+    "decryptPassword": "Heslo pre dešifrovanie",
+    "incorrectPassword": "Nesprávne heslo alebo poškodený súbor",
+    "encryptionInfo": "Súbor bude zašifrovaný pomocou AES-256-GCM"
+  },
+  "settings": {
+    "title": "Nastavenia",
+    "language": "Jazyk aplikácie",
+    "theme": "Téma",
+    "themes": {
+      "light": "Svetlá",
+      "dark": "Tmavá"
+    },
+    "defaultRealizator": "Predvolený realizátor"
+  },
+  "dashboard": {
+    "recentProjects": "Nedávne projekty",
+    "quickActions": "Rýchle akcie",
+    "stats": {
+      "total": "Celkom projektov",
+      "draft": "Vo fáze návrhu",
+      "completed": "Dokončené"
+    }
+  },
+  "validation": {
+    "required": "Toto pole je povinné",
+    "invalidEmail": "Neplatná e-mailová adresa",
+    "invalidPhone": "Neplatné telefónne číslo",
+    "positiveNumber": "Musí byť kladné číslo",
+    "maxLength": "Maximálna dĺžka je {{max}} znakov"
+  }
+}
