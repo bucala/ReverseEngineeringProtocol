@@ -13,6 +13,8 @@ import {
 import SaveIcon from '@mui/icons-material/Save'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import PrintIcon from '@mui/icons-material/Print'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import DrawIcon from '@mui/icons-material/Draw'
 import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/store/projectStore'
 import { useCompanyStore } from '@/store/companyStore'
@@ -24,11 +26,14 @@ import RECadModule from '@/components/modules/RECadModule'
 import TimeEstimationModule from '@/components/modules/TimeEstimationModule'
 import DeliverablesModule from '@/components/modules/DeliverablesModule'
 import NativeCadModule from '@/components/modules/NativeCadModule'
+import GanttModule from '@/components/modules/GanttModule'
 import ExportDialog from '@/components/project/ExportDialog'
+import TemplateDialog from '@/components/project/TemplateDialog'
+import SignatureDialog from '@/components/project/SignatureDialog'
 import { printProtocol } from '@/components/project/ProtocolPrint'
 import type { Project } from '@/types'
 
-const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables', 'nativecad'] as const
+const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables', 'nativecad', 'gantt'] as const
 type StepId = (typeof STEPS)[number]
 
 const STEP_LABELS: Record<StepId, string> = {
@@ -39,6 +44,7 @@ const STEP_LABELS: Record<StepId, string> = {
   time: 'time.title',
   deliverables: 'deliverables.title',
   nativecad: 'nativeCad.title',
+  gantt: 'gantt.title',
 }
 
 export default function ProjectEditor() {
@@ -59,6 +65,8 @@ export default function ProjectEditor() {
 
   const [activeStep, setActiveStep] = useState(0)
   const [exportOpen, setExportOpen] = useState(false)
+  const [templateOpen, setTemplateOpen] = useState(false)
+  const [signatureOpen, setSignatureOpen] = useState(false)
   const [saveIndicator, setSaveIndicator] = useState(false)
 
   // Resolve which project to edit
@@ -101,9 +109,10 @@ export default function ProjectEditor() {
     <ObjectSpecModule key="object" value={project.objectSpecs} onChange={(v) => handleUpdate({ objectSpecs: v })} />,
     <MeshAssessmentModule key="mesh" value={project.meshAssessment} onChange={(v) => handleUpdate({ meshAssessment: v })} />,
     <RECadModule key="recad" value={project.reCadPostprocessing} onChange={(v) => handleUpdate({ reCadPostprocessing: v })} />,
-    <TimeEstimationModule key="time" value={project.timeEstimation} mesh={project.meshAssessment} recad={project.reCadPostprocessing} onChange={(v) => handleUpdate({ timeEstimation: v })} />,
+    <TimeEstimationModule key="time" value={project.timeEstimation} mesh={project.meshAssessment} recad={project.reCadPostprocessing} objectSpecs={project.objectSpecs} onChange={(v) => handleUpdate({ timeEstimation: v })} />,
     <DeliverablesModule key="deliverables" value={project.deliverables} onChange={(v) => handleUpdate({ deliverables: v })} />,
     <NativeCadModule key="nativecad" value={project.nativeCadSpec} onChange={(v) => handleUpdate({ nativeCadSpec: v })} />,
+    <GanttModule key="gantt" project={project} onChange={handleUpdate} />,
   ]
 
   return (
@@ -121,13 +130,27 @@ export default function ProjectEditor() {
             ✓ {t('common.saved')}
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
           <Button
             variant="outlined"
             startIcon={<PrintIcon />}
             onClick={() => printProtocol(project, language)}
           >
             {t('protocol.generate')}
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<BookmarkIcon />}
+            onClick={() => setTemplateOpen(true)}
+          >
+            {t('template.manage')}
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<DrawIcon />}
+            onClick={() => setSignatureOpen(true)}
+          >
+            {t('signature.sign')}
           </Button>
           <Button
             variant="outlined"
@@ -192,6 +215,21 @@ export default function ProjectEditor() {
         open={exportOpen}
         project={project}
         onClose={() => setExportOpen(false)}
+      />
+
+      <TemplateDialog
+        open={templateOpen}
+        project={project}
+        onClose={() => setTemplateOpen(false)}
+        onApply={(patch) => handleUpdate(patch)}
+      />
+
+      <SignatureDialog
+        open={signatureOpen}
+        onClose={() => setSignatureOpen(false)}
+        onSave={(realizatorSig, ziadatelSig, signedAt) => {
+          handleUpdate({ realizatorSignature: realizatorSig, ziadatelSignature: ziadatelSig, signedAt })
+        }}
       />
     </Box>
   )
