@@ -3,6 +3,18 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Project } from '@/types'
 import { createDefaultProject, defaultObjectSpec } from './defaults'
 
+function migrateProject(p: any): Project {
+  const result = { ...p }
+  if (!result.objectSpecs) {
+    result.objectSpecs = result.objectSpec ? [result.objectSpec] : [defaultObjectSpec()]
+  }
+  if (result.startDate === undefined) result.startDate = null
+  if (result.realizatorSignature === undefined) result.realizatorSignature = null
+  if (result.ziadatelSignature === undefined) result.ziadatelSignature = null
+  if (result.signedAt === undefined) result.signedAt = null
+  return result as Project
+}
+
 interface ProjectState {
   projects: Project[]
   activeProjectId: string | null
@@ -62,16 +74,17 @@ export const useProjectStore = create<ProjectState>()(
       setActiveProject: (id) => set({ activeProjectId: id }),
 
       importProject: (project) => {
-        const exists = get().projects.some((p) => p.id === project.id)
+        const migrated = migrateProject(project)
+        const exists = get().projects.some((p) => p.id === migrated.id)
         if (exists) {
           set((s) => ({
-            projects: s.projects.map((p) => (p.id === project.id ? project : p)),
-            activeProjectId: project.id,
+            projects: s.projects.map((p) => (p.id === migrated.id ? migrated : p)),
+            activeProjectId: migrated.id,
           }))
         } else {
           set((s) => ({
-            projects: [project, ...s.projects],
-            activeProjectId: project.id,
+            projects: [migrated, ...s.projects],
+            activeProjectId: migrated.id,
           }))
         }
       },
@@ -92,14 +105,9 @@ export const useProjectStore = create<ProjectState>()(
       migrate: (state: unknown, version: number) => {
         const s = state as { projects?: any[] }
         if (version < 1) {
-          s.projects = (s.projects ?? []).map((p: any) => {
-            if (!p.objectSpecs) {
-              return { ...p, objectSpecs: p.objectSpec ? [p.objectSpec] : [defaultObjectSpec()] }
-            }
-            return p
-          })
+          s.projects = (s.projects ?? []).map(migrateProject)
         }
-        return s as any
+        return { ...s }
       },
     }
   )

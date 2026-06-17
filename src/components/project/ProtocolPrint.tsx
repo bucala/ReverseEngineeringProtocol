@@ -18,6 +18,7 @@ const SK: Translations = {
   section7: '7. Harmonogram prác (Gantt)',
   photos: 'Fotodokumentácia',
   ganttPhase: 'Fáza',
+  ganttTimeline: 'Časová os',
   ganttHours: 'Hodiny',
   ganttDays: 'Dni',
   ganttStartDate: 'Dátum začiatku',
@@ -155,6 +156,7 @@ const EN: Translations = {
   section7: '7. Work Schedule (Gantt)',
   photos: 'Photo Documentation',
   ganttPhase: 'Phase',
+  ganttTimeline: 'Timeline',
   ganttHours: 'Hours',
   ganttDays: 'Days',
   ganttStartDate: 'Start Date',
@@ -234,6 +236,7 @@ const DE: Translations = {
   section7: '7. Arbeitsplan (Gantt)',
   photos: 'Fotodokumentation',
   ganttPhase: 'Phase',
+  ganttTimeline: 'Zeitplan',
   ganttHours: 'Stunden',
   ganttDays: 'Tage',
   ganttStartDate: 'Startdatum',
@@ -365,7 +368,9 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
     preparation: parseFloat((scanBase * 0.2).toFixed(1)),
     scanning: scanBase,
     mesh: parseFloat((scanBase * 0.6 * mult).toFixed(1)),
-    cad: cadBase || parseFloat((scanBase * 1.2 * mult).toFixed(1)),
+    cad: reCadPostprocessing.estimatedCadHours != null
+      ? reCadPostprocessing.estimatedCadHours
+      : parseFloat((scanBase * 1.2 * mult).toFixed(1)),
     inspection: reCadPostprocessing.drawingRequired ? 4 : 0,
     reporting: parseFloat((Math.max(2, (scanBase + cadBase) * 0.1)).toFixed(1)),
     management: parseFloat(((scanBase + cadBase) * 0.1).toFixed(1)),
@@ -482,7 +487,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
               <div style={{ marginTop: 8 }}>
                 <div className="photos-label">{t('photos')}</div>
                 <div className="photo-grid">
-                  {spec.images.map((img, i) => (
+                  {spec.images.slice(0, 8).map((img, i) => (
                     <img key={i} src={img.dataBase64} alt={img.description || `photo-${i + 1}`} className="photo-item" />
                   ))}
                 </div>
@@ -674,14 +679,14 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
       {/* Section 7: Gantt */}
       {(() => {
         const ganttPhases = [
-          { key: 'preparation', label: t('preparation'), color: '#9e9e9e', hours: autoHours.preparation },
-          { key: 'scanning', label: t('scanning'), color: '#1976d2', hours: autoHours.scanning },
-          { key: 'mesh', label: t('meshProcessingLabel'), color: '#ed6c02', hours: autoHours.mesh },
-          { key: 'cad', label: t('cadLabel'), color: '#2e7d32', hours: autoHours.cad },
-          { key: 'inspection', label: t('inspection'), color: '#7b1fa2', hours: autoHours.inspection },
-          { key: 'reporting', label: t('reporting'), color: '#00838f', hours: autoHours.reporting },
-          { key: 'management', label: t('management'), color: '#c62828', hours: autoHours.management },
-          { key: 'travel', label: t('travel'), color: '#78909c', hours: autoHours.travel },
+          { key: 'preparation', label: t('preparation'), color: '#9e9e9e', hours: isAuto ? autoHours.preparation : timeEstimation.preparationEntry.hours },
+          { key: 'scanning', label: t('scanning'), color: '#1976d2', hours: isAuto ? autoHours.scanning : timeEstimation.scanningEntry.hours },
+          { key: 'mesh', label: t('meshProcessingLabel'), color: '#ed6c02', hours: isAuto ? autoHours.mesh : timeEstimation.meshProcessingEntry.hours },
+          { key: 'cad', label: t('cadLabel'), color: '#2e7d32', hours: isAuto ? autoHours.cad : timeEstimation.cadEntry.hours },
+          { key: 'inspection', label: t('inspection'), color: '#7b1fa2', hours: isAuto ? autoHours.inspection : timeEstimation.inspectionEntry.hours },
+          { key: 'reporting', label: t('reporting'), color: '#00838f', hours: isAuto ? autoHours.reporting : timeEstimation.reportingEntry.hours },
+          { key: 'management', label: t('management'), color: '#c62828', hours: isAuto ? autoHours.management : timeEstimation.managementEntry.hours },
+          { key: 'travel', label: t('travel'), color: '#78909c', hours: isAuto ? autoHours.travel : timeEstimation.travelEntry.hours },
         ].filter(p => p.hours > 0)
 
         if (ganttPhases.length === 0) return null
@@ -716,7 +721,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
                   <th style={{ width: '22%' }}>{t('ganttPhase')}</th>
                   <th style={{ width: '10%' }}>{t('ganttHours')}</th>
                   <th style={{ width: '8%' }}>{t('ganttDays')}</th>
-                  <th>{t('ganttPhase')}</th>
+                  <th>{t('ganttTimeline')}</th>
                   {showDates && <th style={{ width: '14%' }}>{t('ganttStartDate')}</th>}
                   {showDates && <th style={{ width: '14%' }}>{t('ganttEndDate')}</th>}
                 </tr>
@@ -784,6 +789,14 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
 // ─── Export function ──────────────────────────────────────────────────────────
 
 export async function printProtocol(project: Project, language: string): Promise<void> {
+  // Open popup synchronously before any await — browsers require window.open() to be
+  // a direct user-gesture continuation; after an await it is treated as a popup and blocked.
+  const printWindow = window.open('', '_blank', 'width=900,height=700')
+  if (!printWindow) {
+    alert('Popup blocked. Please allow popups for this site.')
+    return
+  }
+
   const translations = getTranslations(language)
   const t = (key: string): string => translations[key] ?? key
 
@@ -810,11 +823,6 @@ ${html}
 </body>
 </html>`
 
-  const printWindow = window.open('', '_blank', 'width=900,height=700')
-  if (!printWindow) {
-    alert('Popup blocked. Please allow popups for this site.')
-    return
-  }
   printWindow.document.open()
   printWindow.document.write(fullHtml)
   printWindow.document.close()

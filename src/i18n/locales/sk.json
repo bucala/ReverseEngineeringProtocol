@@ -108,6 +108,7 @@
     "dimensionZ": "Rozmery Z",
     "unit": "Jednotka",
     "notes": "Popis / poznámky k objektu",
+    "imagesTooLarge": "obrázok(y) presiahli 5 MB a neboli nahrané",
     "removeImage": "Odstrániť obrázok",
     "addObject": "Pridať objekt / súčiastku / zostavu",
     "objectIndex": "Objekt {{n}}",

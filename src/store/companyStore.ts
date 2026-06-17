@@ -17,6 +17,7 @@ interface CompanyState {
   deleteProfile: (id: string) => void
   setDefaultRealizator: (id: string | null) => void
   importProfiles: (profiles: CompanyProfile[], merge?: boolean) => void
+  importProjectProfiles: (profiles: CompanyProfile[]) => void
 }
 
 const emptyProfile = (): Omit<CompanyProfile, 'id'> => ({
@@ -71,7 +72,11 @@ export const useCompanyStore = create<CompanyState>()(
 
       importProfiles: (incoming, merge = true) => {
         if (!merge) {
-          set({ profiles: incoming })
+          const incomingIds = new Set(incoming.map((p) => p.id))
+          set((s) => ({
+            profiles: incoming,
+            defaultRealizatorId: incomingIds.has(s.defaultRealizatorId ?? '') ? s.defaultRealizatorId : null,
+          }))
           return
         }
         set((s) => {
@@ -80,6 +85,15 @@ export const useCompanyStore = create<CompanyState>()(
             existingIds.has(p.id) ? { ...p, id: uuidv4() } : p
           )
           return { profiles: [...s.profiles, ...newProfiles] }
+        })
+      },
+
+      importProjectProfiles: (incoming) => {
+        set((s) => {
+          const existingIds = new Set(s.profiles.map((p) => p.id))
+          const toAdd = incoming.filter((p) => !existingIds.has(p.id))
+          if (toAdd.length === 0) return s
+          return { profiles: [...s.profiles, ...toAdd] }
         })
       },
     }),
