@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import { useTranslation } from 'react-i18next'
-import type { Deliverables, MeshFormat, CadOutputFormat, InspectionFormat } from '@/types'
+import type { Deliverables, MeshFormat, CadOutputFormat, InspectionFormat, Format2D } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
 
 interface Props {
@@ -27,12 +27,22 @@ const CAD_LABELS: Record<CadOutputFormat, string> = {
   SOLIDEDGE: 'Solid Edge', INVENTOR: 'Inventor', CREO: 'PTC Creo',
   STEP: 'STEP', IGES: 'IGES', PARASOLID: 'Parasolid',
 }
-const INSPECTION_FORMATS: InspectionFormat[] = ['COLOR_MAP', 'DRAWING_2D', 'REPORT_PDF', 'GD_T']
+const FORMAT_2D: Format2D[] = ['PDF_DRAWING', 'DXF', 'DWG', 'TIFF']
+const FORMAT_2D_LABELS: Record<Format2D, string> = {
+  PDF_DRAWING: 'PDF Drawing',
+  DXF: 'DXF (CNC/Laser)',
+  DWG: 'DWG (AutoCAD)',
+  TIFF: 'TIFF (hi-res)',
+}
+const INSPECTION_FORMATS: InspectionFormat[] = [
+  'COLOR_MAP', 'DIMENSION_REPORT_PDF', 'GD_T', 'FIRST_ARTICLE', 'NOMINAL_ACTUAL',
+]
 const INSPECTION_LABELS: Record<InspectionFormat, string> = {
   COLOR_MAP: 'Color Map Deviation',
-  DRAWING_2D: '2D Drawing',
-  REPORT_PDF: 'Report PDF',
-  GD_T: 'GD&T',
+  DIMENSION_REPORT_PDF: 'Dimension Report (PDF)',
+  GD_T: 'GD&T Analysis',
+  FIRST_ARTICLE: 'First Article Inspection',
+  NOMINAL_ACTUAL: 'Nominal vs. Actual Report',
 }
 
 function ToggleChips<T extends string>({
@@ -122,7 +132,24 @@ export default function DeliverablesModule({ value, onChange }: Props) {
           <Divider />
         </Grid>
 
-        {/* Inspection */}
+        {/* 2D Documentation */}
+        <Grid item xs={12}>
+          <Typography variant="subtitle2" gutterBottom>
+            {t('deliverables.formats2D')}
+          </Typography>
+          <ToggleChips
+            options={FORMAT_2D}
+            selected={value.formats2D}
+            labels={FORMAT_2D_LABELS}
+            onToggle={(v) => set('formats2D', toggle(value.formats2D, v))}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+
+        {/* Inspection reports */}
         <Grid item xs={12}>
           <Typography variant="subtitle2" gutterBottom>
             {t('deliverables.inspectionFormats')}

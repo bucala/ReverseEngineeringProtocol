@@ -12,28 +12,33 @@ import {
 } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
+import PrintIcon from '@mui/icons-material/Print'
 import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/store/projectStore'
 import { useCompanyStore } from '@/store/companyStore'
+import { useAppStore } from '@/store/appStore'
 import ProjectHeader from '@/components/project/ProjectHeader'
 import ObjectSpecModule from '@/components/modules/ObjectSpecModule'
 import MeshAssessmentModule from '@/components/modules/MeshAssessmentModule'
 import RECadModule from '@/components/modules/RECadModule'
 import TimeEstimationModule from '@/components/modules/TimeEstimationModule'
 import DeliverablesModule from '@/components/modules/DeliverablesModule'
+import NativeCadModule from '@/components/modules/NativeCadModule'
 import ExportDialog from '@/components/project/ExportDialog'
+import { printProtocol } from '@/components/project/ProtocolPrint'
 import type { Project } from '@/types'
 
-const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables'] as const
-type Step = (typeof STEPS)[number]
+const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables', 'nativecad'] as const
+type StepId = (typeof STEPS)[number]
 
-const STEP_LABELS: Record<Step, string> = {
+const STEP_LABELS: Record<StepId, string> = {
   project: 'nav.projects',
   object: 'object.title',
   mesh: 'mesh.title',
   recad: 'recad.title',
   time: 'time.title',
   deliverables: 'deliverables.title',
+  nativecad: 'nativeCad.title',
 }
 
 export default function ProjectEditor() {
@@ -50,6 +55,7 @@ export default function ProjectEditor() {
     getActiveProject,
   } = useProjectStore()
   const { profiles } = useCompanyStore()
+  const { language } = useAppStore()
 
   const [activeStep, setActiveStep] = useState(0)
   const [exportOpen, setExportOpen] = useState(false)
@@ -97,6 +103,7 @@ export default function ProjectEditor() {
     <RECadModule key="recad" value={project.reCadPostprocessing} onChange={(v) => handleUpdate({ reCadPostprocessing: v })} />,
     <TimeEstimationModule key="time" value={project.timeEstimation} mesh={project.meshAssessment} recad={project.reCadPostprocessing} onChange={(v) => handleUpdate({ timeEstimation: v })} />,
     <DeliverablesModule key="deliverables" value={project.deliverables} onChange={(v) => handleUpdate({ deliverables: v })} />,
+    <NativeCadModule key="nativecad" value={project.nativeCadSpec} onChange={(v) => handleUpdate({ nativeCadSpec: v })} />,
   ]
 
   return (
@@ -113,6 +120,13 @@ export default function ProjectEditor() {
           )}
         </Box>
         <Stack direction="row" spacing={1}>
+          <Button
+            variant="outlined"
+            startIcon={<PrintIcon />}
+            onClick={() => printProtocol(project, language)}
+          >
+            {t('protocol.generate')}
+          </Button>
           <Button
             variant="outlined"
             startIcon={<FileDownloadIcon />}

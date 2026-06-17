@@ -14,7 +14,15 @@ import {
 } from '@mui/material'
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot'
 import { useTranslation } from 'react-i18next'
-import type { MeshAssessment, ScanningDifficulty, SurfaceFinish, GeometryComplexity } from '@/types'
+import type {
+  MeshAssessment,
+  ScanningDifficulty,
+  SurfaceFinish,
+  GeometryComplexity,
+  ScanningMethod,
+  PrecisionLevel,
+  ReferenceTargets,
+} from '@/types'
 import SectionCard from '@/components/common/SectionCard'
 
 interface Props {
@@ -25,8 +33,11 @@ interface Props {
 const DIFFICULTIES: ScanningDifficulty[] = ['easy', 'medium', 'hard', 'extreme']
 const SURFACES: SurfaceFinish[] = ['matte', 'glossy', 'reflective', 'transparent', 'mixed']
 const COMPLEXITIES: GeometryComplexity[] = ['simple', 'moderate', 'complex', 'freeform']
+const SCANNING_METHODS: ScanningMethod[] = ['structured_light', 'laser_line', 'ct_scan', 'photogrammetry', 'cmm', 'handheld']
+const PRECISION_LEVELS: PrecisionLevel[] = ['standard', 'high_precision', 'metrology']
+const REFERENCE_TARGETS: ReferenceTargets[] = ['none', 'coded', 'uncoded', 'both']
 
-const DIFFICULTY_COLOR: Record<ScanningDifficulty, 'success' | 'warning' | 'error' | 'error'> = {
+const DIFFICULTY_COLOR: Record<ScanningDifficulty, 'success' | 'warning' | 'error'> = {
   easy: 'success',
   medium: 'warning',
   hard: 'error',
@@ -38,9 +49,81 @@ export default function MeshAssessmentModule({ value, onChange }: Props) {
   const set = <K extends keyof MeshAssessment>(key: K, val: MeshAssessment[K]) =>
     onChange({ ...value, [key]: val })
 
+  const showTolerance = value.precisionLevel === 'high_precision' || value.precisionLevel === 'metrology'
+
   return (
     <SectionCard title={t('mesh.title')} icon={<ScatterPlotIcon />}>
       <Grid container spacing={3}>
+        {/* Scanning method */}
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <InputLabel>{t('mesh.scanningMethod')}</InputLabel>
+            <Select
+              value={value.scanningMethod}
+              label={t('mesh.scanningMethod')}
+              onChange={(e) => set('scanningMethod', e.target.value as ScanningMethod)}
+            >
+              {SCANNING_METHODS.map((m) => (
+                <MenuItem key={m} value={m}>
+                  {t(`mesh.methods.${m}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        {/* Precision level */}
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <InputLabel>{t('mesh.precisionLevel')}</InputLabel>
+            <Select
+              value={value.precisionLevel}
+              label={t('mesh.precisionLevel')}
+              onChange={(e) => set('precisionLevel', e.target.value as PrecisionLevel)}
+            >
+              {PRECISION_LEVELS.map((p) => (
+                <MenuItem key={p} value={p}>
+                  {t(`mesh.precisionLevels.${p}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        {/* Tolerance (conditional) */}
+        {showTolerance && (
+          <Grid item xs={12} md={4}>
+            <TextField
+              label={t('mesh.toleranceMm')}
+              type="number"
+              inputProps={{ min: 0, step: 0.001 }}
+              value={value.toleranceMm ?? ''}
+              onChange={(e) =>
+                set('toleranceMm', e.target.value === '' ? null : parseFloat(e.target.value))
+              }
+              fullWidth
+            />
+          </Grid>
+        )}
+
+        {/* Reference targets */}
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <InputLabel>{t('mesh.referenceTargets')}</InputLabel>
+            <Select
+              value={value.referenceTargets}
+              label={t('mesh.referenceTargets')}
+              onChange={(e) => set('referenceTargets', e.target.value as ReferenceTargets)}
+            >
+              {REFERENCE_TARGETS.map((r) => (
+                <MenuItem key={r} value={r}>
+                  {t(`mesh.targets.${r}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
         {/* Scanning difficulty */}
         <Grid item xs={12} md={4}>
           <FormControl fullWidth>
@@ -142,6 +225,54 @@ export default function MeshAssessmentModule({ value, onChange }: Props) {
               />
             }
             label={t('mesh.hasInternalFeatures')}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={value.requiresCtScan}
+                onChange={(e) => set('requiresCtScan', e.target.checked)}
+                color="warning"
+              />
+            }
+            label={t('mesh.requiresCtScan')}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={value.requiresDestructive}
+                onChange={(e) => set('requiresDestructive', e.target.checked)}
+                color="error"
+              />
+            }
+            label={t('mesh.requiresDestructive')}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={value.hasDeepCavities}
+                onChange={(e) => set('hasDeepCavities', e.target.checked)}
+                color="warning"
+              />
+            }
+            label={t('mesh.hasDeepCavities')}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={value.hasThinWalls}
+                onChange={(e) => set('hasThinWalls', e.target.checked)}
+                color="warning"
+              />
+            }
+            label={t('mesh.hasThinWalls')}
           />
         </Grid>
 
