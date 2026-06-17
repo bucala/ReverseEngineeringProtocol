@@ -117,7 +117,7 @@ export const createDefaultProject = (): Project => {
     updatedAt: now,
     realizator: null,
     ziadatel: null,
-    objectSpec: defaultObjectSpec(),
+    objectSpecs: [defaultObjectSpec()],
     meshAssessment: defaultMeshAssessment(),
     reCadPostprocessing: defaultRECad(),
     timeEstimation: defaultTimeEstimation(),

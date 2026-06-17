@@ -285,7 +285,10 @@ interface ProtocolPrintProps {
 }
 
 function ProtocolPrint({ project, t }: ProtocolPrintProps) {
-  const { objectSpec, meshAssessment, reCadPostprocessing, timeEstimation, deliverables, nativeCadSpec } = project
+  const objectSpecs = project.objectSpecs?.length
+    ? project.objectSpecs
+    : project.objectSpec ? [project.objectSpec] : []
+  const { meshAssessment, reCadPostprocessing, timeEstimation, deliverables, nativeCadSpec } = project
   const realizator = project.realizator
   const ziadatel = project.ziadatel
 
@@ -383,30 +386,34 @@ function ProtocolPrint({ project, t }: ProtocolPrintProps) {
         </div>
       </div>
 
-      {/* Section 1: Object */}
+      {/* Section 1: Objects */}
       <div className="section">
         <div className="section-title">{t('section1')}</div>
-        <table>
-          <tbody>
-            <InfoRow label={t('partName')} value={objectSpec.name} />
-            <InfoRow label={t('partNumber')} value={objectSpec.partNumber} />
-            <InfoRow label={t('serialNumber')} value={objectSpec.serialNumber} />
-            <InfoRow label={t('material')} value={objectSpec.material} />
-            {(objectSpec.boundingBox.x || objectSpec.boundingBox.y || objectSpec.boundingBox.z) && (
-              <InfoRow
-                label={t('dimensions')}
-                value={`${objectSpec.boundingBox.x ?? '?'} × ${objectSpec.boundingBox.y ?? '?'} × ${objectSpec.boundingBox.z ?? '?'} ${objectSpec.boundingBox.unit}`}
-              />
+        {objectSpecs.map((spec, idx) => (
+          <div key={idx} style={{ marginBottom: objectSpecs.length > 1 ? 10 : 0 }}>
+            {objectSpecs.length > 1 && (
+              <div style={{ fontWeight: 'bold', padding: '4px 8px', background: '#E3F2FD', marginBottom: 4, borderRadius: 3 }}>
+                {`${t('partName')} ${idx + 1}: ${spec.name || '—'}`}
+              </div>
             )}
-            {objectSpec.rePurpose && objectSpec.rePurpose.length > 0 && (
-              <tr>
-                <td className="label-col">{t('rePurpose')}</td>
-                <td><ChipCell items={objectSpec.rePurpose} /></td>
-              </tr>
-            )}
-            <InfoRow label={t('notes')} value={objectSpec.notes} />
-          </tbody>
-        </table>
+            <table>
+              <tbody>
+                <InfoRow label={t('partName')} value={spec.name} />
+                <InfoRow label={t('partNumber')} value={spec.partNumber} />
+                <InfoRow label={t('serialNumber')} value={spec.serialNumber} />
+                <InfoRow label={t('material')} value={spec.material} />
+                {(spec.boundingBox.x || spec.boundingBox.y || spec.boundingBox.z) && (
+                  <InfoRow label={t('dimensions')}
+                    value={`${spec.boundingBox.x ?? '?'} × ${spec.boundingBox.y ?? '?'} × ${spec.boundingBox.z ?? '?'} ${spec.boundingBox.unit}`} />
+                )}
+                {spec.rePurpose && spec.rePurpose.length > 0 && (
+                  <tr><td className="label-col">{t('rePurpose')}</td><td><ChipCell items={spec.rePurpose} /></td></tr>
+                )}
+                <InfoRow label={t('notes')} value={spec.notes} />
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
 
       {/* Section 2: Scanning Assessment */}
