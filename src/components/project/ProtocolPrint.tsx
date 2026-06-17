@@ -15,6 +15,22 @@ const SK: Translations = {
   section4: '4. Kalkulácia času a nákladov',
   section5: '5. Špecifikácia odovzdávky',
   section6: '6. Natívne CAD prostredie',
+  section7: '7. Harmonogram prác (Gantt)',
+  photos: 'Fotodokumentácia',
+  ganttPhase: 'Fáza',
+  ganttHours: 'Hodiny',
+  ganttDays: 'Dni',
+  ganttStartDate: 'Dátum začiatku',
+  ganttEndDate: 'Dátum ukončenia',
+  ganttTotalDuration: 'Celková dĺžka projektu',
+  preparation: 'Príprava',
+  scanning: 'Skenovanie',
+  meshProcessingLabel: 'Mesh processing',
+  cadLabel: 'CAD spracovanie',
+  inspection: 'Inšpekcia',
+  reporting: 'Reporting',
+  management: 'Projektový manažment',
+  travel: 'Cestovné',
   protocolNumber: 'Číslo protokolu',
   date: 'Dátum',
   status: 'Stav',
@@ -136,6 +152,22 @@ const EN: Translations = {
   stamp: 'Stamp',
   yes: 'Yes',
   no: 'No',
+  section7: '7. Work Schedule (Gantt)',
+  photos: 'Photo Documentation',
+  ganttPhase: 'Phase',
+  ganttHours: 'Hours',
+  ganttDays: 'Days',
+  ganttStartDate: 'Start Date',
+  ganttEndDate: 'End Date',
+  ganttTotalDuration: 'Total Project Duration',
+  preparation: 'Preparation',
+  scanning: 'Scanning',
+  meshProcessingLabel: 'Mesh Processing',
+  cadLabel: 'CAD Processing',
+  inspection: 'Inspection',
+  reporting: 'Reporting',
+  management: 'Project Management',
+  travel: 'Travel',
 }
 
 const DE: Translations = {
@@ -199,6 +231,22 @@ const DE: Translations = {
   stamp: 'Stempel',
   yes: 'Ja',
   no: 'Nein',
+  section7: '7. Arbeitsplan (Gantt)',
+  photos: 'Fotodokumentation',
+  ganttPhase: 'Phase',
+  ganttHours: 'Stunden',
+  ganttDays: 'Tage',
+  ganttStartDate: 'Startdatum',
+  ganttEndDate: 'Enddatum',
+  ganttTotalDuration: 'Gesamtprojektdauer',
+  preparation: 'Vorbereitung',
+  scanning: 'Scanning',
+  meshProcessingLabel: 'Mesh-Verarbeitung',
+  cadLabel: 'CAD-Verarbeitung',
+  inspection: 'Inspektion',
+  reporting: 'Berichterstattung',
+  management: 'Projektmanagement',
+  travel: 'Reisen',
 }
 
 function getTranslations(language: string): Translations {
@@ -250,6 +298,19 @@ const CSS = `
   .sig-block { flex: 1; border: 1px solid #BDBDBD; border-radius: 4px; padding: 12px; }
   .sig-block .sig-title { font-weight: bold; color: #1565C0; margin-bottom: 8px; }
   .sig-line { border-top: 1px solid #212121; margin-top: 40px; padding-top: 4px; font-size: 8pt; color: #546E7A; }
+
+  /* Photo grid */
+  .photo-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .photo-item { width: calc(25% - 6px); aspect-ratio: 4/3; object-fit: cover; border: 1px solid #BDBDBD; border-radius: 3px; }
+  .photos-label { font-weight: bold; font-size: 9pt; color: #37474F; margin-bottom: 4px; }
+
+  /* Gantt */
+  .gantt-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  .gantt-table th { background: #E3F2FD; color: #1565C0; font-weight: bold; padding: 5px 8px; border: 1px solid #90CAF9; text-align: left; }
+  .gantt-table td { padding: 5px 8px; border: 1px solid #BDBDBD; vertical-align: middle; }
+  .gantt-bar-bg { background: #F5F5F5; border-radius: 4px; overflow: hidden; height: 16px; min-width: 40px; }
+  .gantt-bar { height: 16px; border-radius: 4px; }
+  .phase-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
 
   @media print {
     .protocol-print { padding: 0; }
@@ -417,6 +478,16 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
                 <InfoRow label={t('notes')} value={spec.notes} />
               </tbody>
             </table>
+            {spec.images && spec.images.length > 0 && (
+              <div style={{ marginTop: 8 }}>
+                <div className="photos-label">{t('photos')}</div>
+                <div className="photo-grid">
+                  {spec.images.map((img, i) => (
+                    <img key={i} src={img.dataBase64} alt={img.description || `photo-${i + 1}`} className="photo-item" />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -599,6 +670,88 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
           </table>
         </div>
       )}
+
+      {/* Section 7: Gantt */}
+      {(() => {
+        const ganttPhases = [
+          { key: 'preparation', label: t('preparation'), color: '#9e9e9e', hours: autoHours.preparation },
+          { key: 'scanning', label: t('scanning'), color: '#1976d2', hours: autoHours.scanning },
+          { key: 'mesh', label: t('meshProcessingLabel'), color: '#ed6c02', hours: autoHours.mesh },
+          { key: 'cad', label: t('cadLabel'), color: '#2e7d32', hours: autoHours.cad },
+          { key: 'inspection', label: t('inspection'), color: '#7b1fa2', hours: autoHours.inspection },
+          { key: 'reporting', label: t('reporting'), color: '#00838f', hours: autoHours.reporting },
+          { key: 'management', label: t('management'), color: '#c62828', hours: autoHours.management },
+          { key: 'travel', label: t('travel'), color: '#78909c', hours: autoHours.travel },
+        ].filter(p => p.hours > 0)
+
+        if (ganttPhases.length === 0) return null
+
+        const maxHours = Math.max(...ganttPhases.map(p => p.hours))
+        const totalGanttHours = ganttPhases.reduce((s, p) => s + p.hours, 0)
+        const totalGanttDays = Math.ceil(totalGanttHours / 8)
+        const showDates = !!project.startDate
+
+        let currentDate = project.startDate ? new Date(project.startDate) : null
+        const phasesWithDates = ganttPhases.map(phase => {
+          const days = Math.ceil(phase.hours / 8)
+          let startStr: string | null = null
+          let endStr: string | null = null
+          if (currentDate) {
+            startStr = currentDate.toLocaleDateString('sk-SK')
+            const endDate = new Date(currentDate)
+            endDate.setDate(endDate.getDate() + days - 1)
+            endStr = endDate.toLocaleDateString('sk-SK')
+            currentDate = new Date(endDate)
+            currentDate.setDate(currentDate.getDate() + 1)
+          }
+          return { ...phase, days, startStr, endStr }
+        })
+
+        return (
+          <div className="section">
+            <div className="section-title">{t('section7')}</div>
+            <table className="gantt-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '22%' }}>{t('ganttPhase')}</th>
+                  <th style={{ width: '10%' }}>{t('ganttHours')}</th>
+                  <th style={{ width: '8%' }}>{t('ganttDays')}</th>
+                  <th>{t('ganttPhase')}</th>
+                  {showDates && <th style={{ width: '14%' }}>{t('ganttStartDate')}</th>}
+                  {showDates && <th style={{ width: '14%' }}>{t('ganttEndDate')}</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {phasesWithDates.map(phase => (
+                  <tr key={phase.key}>
+                    <td>
+                      <span className="phase-dot" style={{ background: phase.color }} />
+                      {phase.label}
+                    </td>
+                    <td>{phase.hours.toFixed(1)} h</td>
+                    <td>{phase.days} d</td>
+                    <td>
+                      <div className="gantt-bar-bg">
+                        <div className="gantt-bar" style={{ width: `${Math.round(phase.hours / maxHours * 100)}%`, background: phase.color }} />
+                      </div>
+                    </td>
+                    {showDates && <td>{phase.startStr}</td>}
+                    {showDates && <td>{phase.endStr}</td>}
+                  </tr>
+                ))}
+                <tr className="total-row">
+                  <td><strong>{t('ganttTotalDuration')}</strong></td>
+                  <td>{totalGanttHours.toFixed(1)} h</td>
+                  <td>{totalGanttDays} d</td>
+                  <td></td>
+                  {showDates && <td>{phasesWithDates[0]?.startStr}</td>}
+                  {showDates && <td>{phasesWithDates[phasesWithDates.length - 1]?.endStr}</td>}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )
+      })()}
 
       {/* Signatures */}
       <div className="signatures">
