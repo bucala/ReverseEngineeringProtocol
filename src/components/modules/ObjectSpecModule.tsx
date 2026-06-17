@@ -12,13 +12,14 @@ import {
   Tooltip,
   Stack,
   Paper,
+  Chip,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
-import type { ObjectSpec, ObjectImage } from '@/types'
+import type { ObjectSpec, ObjectImage, REPurpose } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
 import CategoryIcon from '@mui/icons-material/Category'
 import { readFileAsDataURL } from '@/utils/fileFormat'
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const UNITS = ['mm', 'cm', 'm', 'inch'] as const
+const RE_PURPOSES: REPurpose[] = ['spare_part', 'design_innovation', 'archiving', 'documentation', 'inspection', 'other']
 
 export default function ObjectSpecModule({ value, onChange }: Props) {
   const { t } = useTranslation()
@@ -41,6 +43,12 @@ export default function ObjectSpecModule({ value, onChange }: Props) {
       ...value,
       boundingBox: { ...value.boundingBox, [axis]: num === '' ? null : parseFloat(num) },
     })
+
+  const togglePurpose = (p: REPurpose) => {
+    const current = value.rePurpose ?? []
+    const next = current.includes(p) ? current.filter((v) => v !== p) : [...current, p]
+    set('rePurpose', next)
+  }
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -79,6 +87,8 @@ export default function ObjectSpecModule({ value, onChange }: Props) {
   const removeImage = (id: string) =>
     set('images', value.images.filter((img) => img.id !== id))
 
+  const rePurpose = value.rePurpose ?? []
+
   return (
     <>
       <SectionCard title={t('object.title')} icon={<CategoryIcon />}>
@@ -102,12 +112,55 @@ export default function ObjectSpecModule({ value, onChange }: Props) {
           </Grid>
           <Grid item xs={12} md={3}>
             <TextField
+              label={t('object.serialNumber')}
+              value={value.serialNumber ?? ''}
+              onChange={(e) => set('serialNumber', e.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
               label={t('object.material')}
               value={value.material}
               onChange={(e) => set('material', e.target.value)}
               fullWidth
             />
           </Grid>
+
+          {/* RE Purpose */}
+          <Grid item xs={12}>
+            <Typography variant="subtitle2" gutterBottom>
+              {t('rePurpose.title')}
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {RE_PURPOSES.map((p) => {
+                const selected = rePurpose.includes(p)
+                return (
+                  <Chip
+                    key={p}
+                    label={t(`rePurpose.${p}`)}
+                    onClick={() => togglePurpose(p)}
+                    color={selected ? 'primary' : 'default'}
+                    variant={selected ? 'filled' : 'outlined'}
+                    clickable
+                  />
+                )
+              })}
+            </Box>
+          </Grid>
+
+          {rePurpose.length > 0 && (
+            <Grid item xs={12}>
+              <TextField
+                label={t('rePurpose.notes')}
+                value={value.rePurposeNotes ?? ''}
+                onChange={(e) => set('rePurposeNotes', e.target.value)}
+                multiline
+                rows={2}
+                fullWidth
+              />
+            </Grid>
+          )}
 
           {/* Bounding Box */}
           <Grid item xs={12}>
