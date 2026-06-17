@@ -113,11 +113,13 @@ export default function ProjectEditor() {
           <Typography variant="h4">
             {project.title || project.protocolNumber}
           </Typography>
-          {saveIndicator && (
-            <Typography variant="caption" color="success.main">
-              ✓ {t('common.save')}d
-            </Typography>
-          )}
+          <Typography
+            variant="caption"
+            color="success.main"
+            sx={{ visibility: saveIndicator ? 'visible' : 'hidden' }}
+          >
+            ✓ {t('common.saved')}
+          </Typography>
         </Box>
         <Stack direction="row" spacing={1}>
           <Button
