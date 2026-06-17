@@ -96,6 +96,7 @@
     "title": "Špecifikácia objektu",
     "name": "Názov dielca / zostavy",
     "partNumber": "Číslo dielca",
+    "serialNumber": "Sériové číslo",
     "material": "Materiál",
     "images": "Obrázky / fotografie",
     "uploadImages": "Nahrať obrázky",
@@ -108,8 +109,45 @@
     "notes": "Popis / poznámky k objektu",
     "removeImage": "Odstrániť obrázok"
   },
+  "rePurpose": {
+    "title": "Účel reverzného inžinierstva",
+    "notes": "Poznámky k účelu",
+    "spare_part": "Výroba náhradného dielu",
+    "design_innovation": "Inovácia dizajnu",
+    "archiving": "Archivácia / Digitalizácia",
+    "documentation": "Dokumentácia (starý dielec)",
+    "inspection": "Inšpekcia / Kontrola kvality",
+    "other": "Iné"
+  },
   "mesh": {
     "title": "Hodnotenie skenovania (Mesh Assessment)",
+    "scanningMethod": "Metóda skenovania",
+    "methods": {
+      "structured_light": "Štruktúrované svetlo (GOM, Artec Eva)",
+      "laser_line": "Laserový skener (laser line)",
+      "ct_scan": "CT skenovanie (priemyselná tomografia)",
+      "photogrammetry": "Fotogrametria",
+      "cmm": "CMM – Súradnicový merací stroj",
+      "handheld": "Ručný skener"
+    },
+    "precisionLevel": "Úroveň presnosti",
+    "precisionLevels": {
+      "standard": "Štandardná (±0.1–0.5 mm)",
+      "high_precision": "Vysoká presnosť (±0.02–0.05 mm)",
+      "metrology": "Metrológia (±0.005–0.02 mm)"
+    },
+    "toleranceMm": "Požadovaná tolerancia (mm)",
+    "requiresCtScan": "Vyžaduje CT skenovanie",
+    "requiresDestructive": "Vyžaduje deštruktívnu metódu",
+    "referenceTargets": "Referenčné body",
+    "targets": {
+      "none": "Bez referenčných bodov",
+      "coded": "Kódované body (automatická registrácia)",
+      "uncoded": "Nekódované body",
+      "both": "Kombinácia oboch"
+    },
+    "hasDeepCavities": "Hlboké dutiny / ťažko prístupné miesta",
+    "hasThinWalls": "Tenké steny (< 1 mm)",
     "scanningDifficulty": "Obtiažnosť skenovania",
     "difficulties": {
       "easy": "Ľahká",
@@ -139,6 +177,15 @@
     "estimatedScanningHours": "Odhadovaný čas skenovania (h)",
     "notes": "Poznámky k skenovaniu"
   },
+  "meshProcessing": {
+    "title": "Úprava polygónovej siete (Mesh Processing)",
+    "errorCleaning": "Čistenie chýb (holes, spikes, noise)",
+    "smoothing": "Vyhladzovanie povrchu",
+    "coordinateAlignment": "Zarovnanie do súradnicového systému",
+    "dataOptimization": "Optimalizácia veľkosti dát",
+    "watertight": "Uzavretá (watertight) sieť",
+    "decimation": "Decimácia (redukcia počtu polygónov)"
+  },
   "recad": {
     "title": "RE & CAD postprocessing",
     "strategy": "Stratégia spracovania",
@@ -160,6 +207,40 @@
     "estimatedCadHours": "Odhadovaný čas CAD spracovania (h)",
     "notes": "Poznámky k CAD postprocessingu"
   },
+  "nativeCad": {
+    "title": "Natívne CAD prostredie",
+    "required": "Zákazník požaduje natívny CAD formát",
+    "system": "CAD systém",
+    "systems": {
+      "NX": "Siemens NX",
+      "SOLIDWORKS": "SolidWorks (Dassault)",
+      "INVENTOR": "Autodesk Inventor",
+      "CATIA_V5": "CATIA V5 (Dassault)",
+      "CATIA_V6": "CATIA V6 / 3DEXPERIENCE",
+      "CREO": "PTC Creo (Pro/ENGINEER)",
+      "SOLIDEDGE": "Solid Edge (Siemens)",
+      "FUSION360": "Autodesk Fusion 360"
+    },
+    "version": "Verzia softvéru",
+    "versionHint": "Napr. SolidWorks 2023 SP4 – dôležité pre spätnú kompatibilitu",
+    "useCustomTemplates": "Použiť firemné šablóny zákazníka",
+    "templateNotes": "Popis šablón / knižníc",
+    "drawingStandard": "Kótovací štandard",
+    "standards": {
+      "ISO": "ISO (európska norma)",
+      "ANSI": "ANSI (americká norma)",
+      "DIN": "DIN (nemecká norma)",
+      "custom": "Vlastný štandard"
+    },
+    "customDrawingStandard": "Popis vlastného štandardu",
+    "sheetMetalRequired": "Súčasťou sú plechové diely",
+    "sheetMetalKFactor": "K-factor pre plech",
+    "featureTreeRequired": "Plnohodnotný Feature Tree (história)",
+    "parametricRelations": "Parametrické väzby a rovnice",
+    "assemblyConstraints": "Väzby zostáv (Assembly constraints)",
+    "notes": "Poznámky k CAD prostrediu",
+    "notRequired": "Natívny CAD formát nie je požadovaný. Postačujú neutrálne formáty (STEP, IGES, Parasolid)."
+  },
   "time": {
     "title": "Kalkulácia času a nákladov",
     "mode": "Režim kalkulácie",
@@ -168,10 +249,12 @@
       "manual": "Manuálny vstup"
     },
     "currency": "Mena",
+    "preparation": "Príprava a setup",
     "scanning": "Skenovanie",
     "meshProcessing": "Spracovanie mesh",
     "cad": "CAD spracovanie",
     "inspection": "Inšpekcia",
+    "reporting": "Výstupná kontrola a reporting",
     "management": "Riadenie projektu",
     "travel": "Cestovné",
     "overhead": "Réžia (%)",
@@ -187,10 +270,40 @@
     "optimizedMeshFormats": "Optimalizované mesh dáta",
     "cadFormats": "CAD súbory",
     "inspectionFormats": "Inšpekčné protokoly",
+    "formats2D": "2D Dokumentácia",
+    "format2DOptions": {
+      "PDF_DRAWING": "PDF výkres",
+      "DXF": "DXF (pre páliace stroje)",
+      "DWG": "DWG (AutoCAD)",
+      "TIFF": "TIFF (vysoké rozlíšenie)"
+    },
+    "inspectionOptions": {
+      "COLOR_MAP": "3D farebná mapa odchýlok",
+      "DIMENSION_REPORT_PDF": "Protokol merania kót (PDF)",
+      "GD_T": "GD&T tolerančná analýza",
+      "FIRST_ARTICLE": "First Article Inspection (FAI)",
+      "NOMINAL_ACTUAL": "Nominál vs. Aktuálny porovnávací report"
+    },
     "cloudUpload": "Nahrať do cloudu",
     "physicalMedia": "Fyzické médium (USB / DVD)",
     "deliveryNotes": "Poznámky k odovzdávke",
     "deadline": "Termín odovzdania"
+  },
+  "protocol": {
+    "generate": "Generovať protokol (PDF)",
+    "title": "PROTOKOL O ROZSAHU PRÁC",
+    "subtitle": "Protocol of Work Scope",
+    "section1": "1. Predmet zákazky",
+    "section2": "2. Hodnotenie skenovania",
+    "section3": "3. RE & CAD postprocessing",
+    "section4": "4. Kalkulácia času a nákladov",
+    "section5": "5. Špecifikácia odovzdávky",
+    "section6": "6. Natívne CAD prostredie",
+    "signatures": "Podpisy a pečiatky",
+    "realizatorSignature": "Za Realizátora",
+    "ziadatelSignature": "Za Žiadateľa",
+    "date": "Dátum",
+    "stamp": "Pečiatka"
   },
   "security": {
     "title": "Zabezpečenie exportu",

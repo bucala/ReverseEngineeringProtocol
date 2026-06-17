@@ -5,10 +5,19 @@ import type {
   Deliverables,
   ObjectSpec,
   Project,
+  NativeCadSpec,
 } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 
 export const defaultMeshAssessment = (): MeshAssessment => ({
+  scanningMethod: 'structured_light',
+  precisionLevel: 'standard',
+  toleranceMm: null,
+  requiresCtScan: false,
+  requiresDestructive: false,
+  referenceTargets: 'none',
+  hasDeepCavities: false,
+  hasThinWalls: false,
   scanningDifficulty: 'medium',
   surfaceFinish: 'matte',
   surfacePrepRequired: false,
@@ -28,6 +37,14 @@ export const defaultRECad = (): RECadPostprocessing => ({
   drawingRequired: false,
   toleranceAnalysis: false,
   selectedCadFormats: [],
+  meshProcessingTasks: {
+    errorCleaning: true,
+    smoothing: false,
+    coordinateAlignment: true,
+    dataOptimization: false,
+    watertight: false,
+    decimation: false,
+  },
   estimatedCadHours: null,
   notes: '',
 })
@@ -35,10 +52,12 @@ export const defaultRECad = (): RECadPostprocessing => ({
 export const defaultTimeEstimation = (): TimeEstimation => ({
   mode: 'auto',
   currency: 'EUR',
+  preparationEntry: { label: 'Preparation', hours: 0, rate: 50 },
   scanningEntry: { label: 'Scanning', hours: 0, rate: 65 },
   meshProcessingEntry: { label: 'Mesh Processing', hours: 0, rate: 55 },
   cadEntry: { label: 'CAD Processing', hours: 0, rate: 60 },
   inspectionEntry: { label: 'Inspection', hours: 0, rate: 55 },
+  reportingEntry: { label: 'Reporting', hours: 0, rate: 55 },
   managementEntry: { label: 'Project Management', hours: 0, rate: 50 },
   travelEntry: { label: 'Travel', hours: 0, rate: 45 },
   overhead: 10,
@@ -50,6 +69,7 @@ export const defaultDeliverables = (): Deliverables => ({
   optimizedMeshFormats: [],
   cadFormats: [],
   inspectionFormats: [],
+  formats2D: [],
   cloudUpload: false,
   physicalMedia: false,
   deliveryNotes: '',
@@ -59,9 +79,28 @@ export const defaultDeliverables = (): Deliverables => ({
 export const defaultObjectSpec = (): ObjectSpec => ({
   name: '',
   partNumber: '',
+  serialNumber: '',
   material: '',
   images: [],
   boundingBox: { x: null, y: null, z: null, unit: 'mm' },
+  notes: '',
+  rePurpose: [],
+  rePurposeNotes: '',
+})
+
+export const defaultNativeCadSpec = (): NativeCadSpec => ({
+  required: false,
+  system: null,
+  version: '',
+  useCustomTemplates: false,
+  templateNotes: '',
+  drawingStandard: 'ISO',
+  customDrawingStandard: '',
+  sheetMetalRequired: false,
+  sheetMetalKFactor: null,
+  featureTreeRequired: true,
+  parametricRelations: true,
+  assemblyConstraints: false,
   notes: '',
 })
 
@@ -83,6 +122,7 @@ export const createDefaultProject = (): Project => {
     reCadPostprocessing: defaultRECad(),
     timeEstimation: defaultTimeEstimation(),
     deliverables: defaultDeliverables(),
+    nativeCadSpec: defaultNativeCadSpec(),
     internalNotes: '',
   }
 }

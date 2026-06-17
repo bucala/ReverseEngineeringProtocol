@@ -35,13 +35,18 @@ export interface BoundingBox {
   unit: 'mm' | 'cm' | 'm' | 'inch'
 }
 
+export type REPurpose = 'spare_part' | 'design_innovation' | 'archiving' | 'documentation' | 'inspection' | 'other'
+
 export interface ObjectSpec {
   name: string
   partNumber: string
+  serialNumber: string
   material: string
   images: ObjectImage[]
   boundingBox: BoundingBox
   notes: string
+  rePurpose: REPurpose[]
+  rePurposeNotes: string
 }
 
 // ─── Mesh Assessment Module ────────────────────────────────────────────────────
@@ -49,8 +54,19 @@ export interface ObjectSpec {
 export type ScanningDifficulty = 'easy' | 'medium' | 'hard' | 'extreme'
 export type SurfaceFinish = 'matte' | 'glossy' | 'reflective' | 'transparent' | 'mixed'
 export type GeometryComplexity = 'simple' | 'moderate' | 'complex' | 'freeform'
+export type ScanningMethod = 'structured_light' | 'laser_line' | 'ct_scan' | 'photogrammetry' | 'cmm' | 'handheld'
+export type PrecisionLevel = 'standard' | 'high_precision' | 'metrology'
+export type ReferenceTargets = 'none' | 'coded' | 'uncoded' | 'both'
 
 export interface MeshAssessment {
+  scanningMethod: ScanningMethod
+  precisionLevel: PrecisionLevel
+  toleranceMm: number | null
+  requiresCtScan: boolean
+  requiresDestructive: boolean
+  referenceTargets: ReferenceTargets
+  hasDeepCavities: boolean
+  hasThinWalls: boolean
   scanningDifficulty: ScanningDifficulty
   surfaceFinish: SurfaceFinish
   surfacePrepRequired: boolean
@@ -78,6 +94,15 @@ export type CadOutputFormat =
   | 'IGES'
   | 'PARASOLID'
 
+export interface MeshProcessingTasks {
+  errorCleaning: boolean
+  smoothing: boolean
+  coordinateAlignment: boolean
+  dataOptimization: boolean
+  watertight: boolean
+  decimation: boolean
+}
+
 export interface RECadPostprocessing {
   strategy: REStrategy
   surfacingMethod: SurfacingMethod
@@ -86,6 +111,7 @@ export interface RECadPostprocessing {
   drawingRequired: boolean
   toleranceAnalysis: boolean
   selectedCadFormats: CadOutputFormat[]
+  meshProcessingTasks: MeshProcessingTasks
   estimatedCadHours: number | null
   notes: string
 }
@@ -103,10 +129,12 @@ export interface TimeEntry {
 export interface TimeEstimation {
   mode: EstimationMode
   currency: 'EUR' | 'USD' | 'CZK'
+  preparationEntry: TimeEntry
   scanningEntry: TimeEntry
   meshProcessingEntry: TimeEntry
   cadEntry: TimeEntry
   inspectionEntry: TimeEntry
+  reportingEntry: TimeEntry
   managementEntry: TimeEntry
   travelEntry: TimeEntry
   overhead: number   // percentage 0–100
@@ -116,17 +144,40 @@ export interface TimeEstimation {
 // ─── Deliverables Module ──────────────────────────────────────────────────────
 
 export type MeshFormat = 'STL' | 'OBJ' | 'PLY' | 'E57' | 'FBX' | '3MF'
-export type InspectionFormat = 'COLOR_MAP' | 'DRAWING_2D' | 'REPORT_PDF' | 'GD_T'
+export type InspectionFormat = 'COLOR_MAP' | 'DIMENSION_REPORT_PDF' | 'GD_T' | 'FIRST_ARTICLE' | 'NOMINAL_ACTUAL'
+export type Format2D = 'PDF_DRAWING' | 'DXF' | 'DWG' | 'TIFF'
 
 export interface Deliverables {
   rawMeshFormats: MeshFormat[]
   optimizedMeshFormats: MeshFormat[]
   cadFormats: CadOutputFormat[]
   inspectionFormats: InspectionFormat[]
+  formats2D: Format2D[]
   cloudUpload: boolean
   physicalMedia: boolean
   deliveryNotes: string
   deadline: string | null  // ISO date string
+}
+
+// ─── Native CAD Spec ──────────────────────────────────────────────────────────
+
+export type CadSystem = 'NX' | 'SOLIDWORKS' | 'INVENTOR' | 'CATIA_V5' | 'CATIA_V6' | 'CREO' | 'SOLIDEDGE' | 'FUSION360'
+export type DrawingStandard = 'ISO' | 'ANSI' | 'DIN' | 'custom'
+
+export interface NativeCadSpec {
+  required: boolean
+  system: CadSystem | null
+  version: string
+  useCustomTemplates: boolean
+  templateNotes: string
+  drawingStandard: DrawingStandard
+  customDrawingStandard: string
+  sheetMetalRequired: boolean
+  sheetMetalKFactor: number | null
+  featureTreeRequired: boolean
+  parametricRelations: boolean
+  assemblyConstraints: boolean
+  notes: string
 }
 
 // ─── Project ─────────────────────────────────────────────────────────────────
@@ -147,6 +198,7 @@ export interface Project {
   reCadPostprocessing: RECadPostprocessing
   timeEstimation: TimeEstimation
   deliverables: Deliverables
+  nativeCadSpec: NativeCadSpec
   internalNotes: string
 }
 
