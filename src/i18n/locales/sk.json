@@ -110,7 +110,11 @@
     "notes": "Popis / poznámky k objektu",
     "removeImage": "Odstrániť obrázok",
     "addObject": "Pridať objekt / súčiastku / zostavu",
-    "objectIndex": "Objekt {{n}}"
+    "objectIndex": "Objekt {{n}}",
+    "model3D": "3D Model",
+    "uploadModel": "Nahrať 3D model (STL / OBJ)",
+    "removeModel": "Odstrániť 3D model",
+    "modelTooBig": "Súbor je príliš veľký (max 15 MB)"
   },
   "rePurpose": {
     "title": "Účel reverzného inžinierstva",
@@ -265,7 +269,9 @@
     "ratePerHour": "Sadzba (€/h)",
     "totalHours": "Celkový čas (h)",
     "subtotal": "Medzisúčet",
-    "totalCost": "Celkové náklady"
+    "totalCost": "Celkové náklady",
+    "aiEstimate": "AI odhad",
+    "estimating": "Počítam odhad..."
   },
   "deliverables": {
     "title": "Špecifikácia odovzdávky",
@@ -326,7 +332,9 @@
       "light": "Svetlá",
       "dark": "Tmavá"
     },
-    "defaultRealizator": "Predvolený realizátor"
+    "defaultRealizator": "Predvolený realizátor",
+    "anthropicApiKey": "Anthropic API Key",
+    "anthropicApiKeyHint": "Voliteľné: pre AI odhad časov pomocou Claude"
   },
   "dashboard": {
     "recentProjects": "Nedávne projekty",
@@ -336,6 +344,35 @@
       "draft": "Vo fáze návrhu",
       "completed": "Dokončené"
     }
+  },
+  "template": {
+    "manage": "Šablóny",
+    "saveAs": "Uložiť ako šablónu",
+    "apply": "Použiť šablónu",
+    "name": "Názov šablóny",
+    "description": "Popis šablóny",
+    "save": "Uložiť šablónu",
+    "applyBtn": "Aplikovať",
+    "noTemplates": "Žiadne šablóny",
+    "confirmApply": "Prepíše nastavenia projektu konfiguráciou šablóny. Pokračovať?",
+    "deleted": "Šablóna vymazaná",
+    "saved": "Šablóna uložená"
+  },
+  "signature": {
+    "title": "Elektronický podpis",
+    "realizator": "Podpis realizátora",
+    "ziadatel": "Podpis žiadateľa",
+    "clear": "Vymazať",
+    "save": "Uložiť podpisy",
+    "sign": "Podpísať protokol"
+  },
+  "gantt": {
+    "title": "Časová os projektu",
+    "startDate": "Dátum začiatku",
+    "phase": "Fáza",
+    "duration": "Trvanie (dni)",
+    "startDateRequired": "Zadajte dátum začiatku pre zobrazenie Ganttovho diagramu",
+    "totalDuration": "Celkové trvanie projektu"
   },
   "validation": {
     "required": "Toto pole je povinné",

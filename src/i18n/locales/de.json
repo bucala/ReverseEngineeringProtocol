@@ -110,7 +110,11 @@
     "notes": "Objektbeschreibung / Notizen",
     "removeImage": "Bild entfernen",
     "addObject": "Objekt / Bauteil / Baugruppe hinzufügen",
-    "objectIndex": "Objekt {{n}}"
+    "objectIndex": "Objekt {{n}}",
+    "model3D": "3D-Modell",
+    "uploadModel": "3D-Modell hochladen (STL / OBJ)",
+    "removeModel": "3D-Modell entfernen",
+    "modelTooBig": "Datei ist zu groß (max 15 MB)"
   },
   "rePurpose": {
     "title": "Zweck des Reverse Engineerings",
@@ -265,7 +269,9 @@
     "ratePerHour": "Stundensatz (€/h)",
     "totalHours": "Gesamtzeit (h)",
     "subtotal": "Zwischensumme",
-    "totalCost": "Gesamtkosten"
+    "totalCost": "Gesamtkosten",
+    "aiEstimate": "KI-Schätzung",
+    "estimating": "Schätzung wird berechnet..."
   },
   "deliverables": {
     "title": "Lieferobjekte",
@@ -326,7 +332,9 @@
       "light": "Hell",
       "dark": "Dunkel"
     },
-    "defaultRealizator": "Standard-Auftragnehmer"
+    "defaultRealizator": "Standard-Auftragnehmer",
+    "anthropicApiKey": "Anthropic API-Schlüssel",
+    "anthropicApiKeyHint": "Optional: für KI-Zeitschätzung mit Claude"
   },
   "dashboard": {
     "recentProjects": "Zuletzt bearbeitet",
@@ -336,6 +344,35 @@
       "draft": "Entwürfe",
       "completed": "Abgeschlossen"
     }
+  },
+  "template": {
+    "manage": "Vorlagen",
+    "saveAs": "Als Vorlage speichern",
+    "apply": "Vorlage anwenden",
+    "name": "Vorlagenname",
+    "description": "Vorlagenbeschreibung",
+    "save": "Vorlage speichern",
+    "applyBtn": "Anwenden",
+    "noTemplates": "Keine Vorlagen",
+    "confirmApply": "Projekteinstellungen werden mit der Vorlagenkonfiguration überschrieben. Fortfahren?",
+    "deleted": "Vorlage gelöscht",
+    "saved": "Vorlage gespeichert"
+  },
+  "signature": {
+    "title": "Elektronische Unterschrift",
+    "realizator": "Unterschrift des Auftragnehmers",
+    "ziadatel": "Unterschrift des Auftraggebers",
+    "clear": "Löschen",
+    "save": "Unterschriften speichern",
+    "sign": "Protokoll unterzeichnen"
+  },
+  "gantt": {
+    "title": "Projektzeitplan",
+    "startDate": "Startdatum",
+    "phase": "Phase",
+    "duration": "Dauer (Tage)",
+    "startDateRequired": "Geben Sie ein Startdatum ein, um das Gantt-Diagramm anzuzeigen",
+    "totalDuration": "Gesamtprojektdauer"
   },
   "validation": {
     "required": "Dieses Feld ist erforderlich",

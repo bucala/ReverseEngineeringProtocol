@@ -37,6 +37,13 @@ export interface BoundingBox {
 
 export type REPurpose = 'spare_part' | 'design_innovation' | 'archiving' | 'documentation' | 'inspection' | 'other'
 
+export interface Model3D {
+  dataBase64: string
+  format: 'stl' | 'obj'
+  filename: string
+  filesize: number
+}
+
 export interface ObjectSpec {
   name: string
   partNumber: string
@@ -47,6 +54,7 @@ export interface ObjectSpec {
   notes: string
   rePurpose: REPurpose[]
   rePurposeNotes: string
+  model3D: Model3D | null
 }
 
 // ─── Mesh Assessment Module ────────────────────────────────────────────────────
@@ -201,6 +209,24 @@ export interface Project {
   deliverables: Deliverables
   nativeCadSpec: NativeCadSpec
   internalNotes: string
+  realizatorSignature: string | null   // base64 PNG
+  ziadatelSignature: string | null     // base64 PNG
+  signedAt: string | null
+  startDate: string | null
+}
+
+// ─── Project Templates ────────────────────────────────────────────────────────
+
+export interface ProjectTemplate {
+  id: string
+  name: string
+  description: string
+  createdAt: string
+  meshAssessment: MeshAssessment
+  reCadPostprocessing: RECadPostprocessing
+  timeEstimation: TimeEstimation
+  deliverables: Deliverables
+  nativeCadSpec: NativeCadSpec
 }
 
 // ─── App-level State ──────────────────────────────────────────────────────────
@@ -212,6 +238,7 @@ export interface AppSettings {
   language: AppLanguage
   themeMode: AppThemeMode
   defaultRealizatorId: string | null
+  anthropicApiKey: string
 }
 
 // ─── File Format ──────────────────────────────────────────────────────────────

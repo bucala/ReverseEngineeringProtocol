@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Typography,
@@ -9,17 +10,23 @@ import {
   MenuItem,
   ToggleButtonGroup,
   ToggleButton,
+  TextField,
+  InputAdornment,
+  IconButton,
   type SelectChangeEvent,
 } from '@mui/material'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '@/store/appStore'
 import type { AppLanguage, AppThemeMode } from '@/types'
 
 export default function Settings() {
   const { t } = useTranslation()
-  const { language, setLanguage, themeMode, setThemeMode } = useAppStore()
+  const { language, setLanguage, themeMode, setThemeMode, anthropicApiKey, setAnthropicApiKey } = useAppStore()
+  const [showApiKey, setShowApiKey] = useState(false)
 
   const handleLanguage = (e: SelectChangeEvent) => setLanguage(e.target.value as AppLanguage)
   const handleTheme = (_: unknown, val: AppThemeMode | null) => {
@@ -63,6 +70,24 @@ export default function Settings() {
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
+
+          <TextField
+            label={t('settings.anthropicApiKey')}
+            type={showApiKey ? 'text' : 'password'}
+            value={anthropicApiKey}
+            onChange={(e) => setAnthropicApiKey(e.target.value)}
+            fullWidth
+            helperText={t('settings.anthropicApiKeyHint')}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowApiKey((v) => !v)} edge="end">
+                    {showApiKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </CardContent>
       </Card>
     </Box>
