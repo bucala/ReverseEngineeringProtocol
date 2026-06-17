@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import * as THREE from 'three'
 import { STLLoader } from 'three/addons/loaders/STLLoader.js'
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 interface Props {
@@ -96,11 +97,33 @@ export default function ModelViewer3D({ dataBase64, format }: Props) {
 
           setLoading(false)
         } else {
-          // OBJ: basic fallback - show a placeholder box
-          const geometry = new THREE.BoxGeometry(1, 1, 1)
-          const material = new THREE.MeshPhongMaterial({ color: 0x4fc3f7, wireframe: true })
-          const mesh = new THREE.Mesh(geometry, material)
-          scene.add(mesh)
+          // OBJ: decode to text and parse
+          const decoder = new TextDecoder('utf-8')
+          const text = decoder.decode(view)
+          const loader = new OBJLoader()
+          const obj = loader.parse(text)
+
+          // Center and scale the OBJ group
+          const box = new THREE.Box3().setFromObject(obj)
+          const center = new THREE.Vector3()
+          box.getCenter(center)
+          obj.position.sub(center)
+
+          const size = new THREE.Vector3()
+          box.getSize(size)
+          const maxDim = Math.max(size.x, size.y, size.z)
+          const scale = maxDim > 0 ? 3 / maxDim : 1
+          obj.scale.setScalar(scale)
+
+          const material = new THREE.MeshPhongMaterial({ color: 0x4fc3f7, specular: 0x222222, shininess: 40 })
+          obj.traverse((child) => {
+            if (child instanceof THREE.Mesh) child.material = material
+          })
+
+          scene.add(obj)
+          camera.position.set(0, 0, 5)
+          controls.target.set(0, 0, 0)
+          controls.update()
           setLoading(false)
         }
       } catch (err) {

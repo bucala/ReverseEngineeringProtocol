@@ -47,11 +47,12 @@ export function exportCompanyProfiles(profiles: CompanyProfile[]): Blob {
 }
 
 export function importCompanyProfiles(json: string): CompanyProfile[] {
-  const payload = JSON.parse(json) as CompanyExportPayload
-  if (!Array.isArray(payload.profiles)) {
-    throw new Error('Invalid company profiles file')
-  }
-  return payload.profiles
+  const data = JSON.parse(json)
+  // Accept plain array
+  if (Array.isArray(data)) return data as CompanyProfile[]
+  // Accept wrapped format: { profiles: [...] } or { version, exportedAt, profiles: [...] }
+  if (data && Array.isArray(data.profiles)) return data.profiles as CompanyProfile[]
+  throw new Error('Invalid company profiles file')
 }
 
 // ─── File download helper ─────────────────────────────────────────────────────
