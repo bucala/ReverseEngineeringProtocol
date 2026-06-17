@@ -111,7 +111,15 @@ export default function ProjectEditor() {
     <RECadModule key="recad" value={project.reCadPostprocessing} onChange={(v) => handleUpdate({ reCadPostprocessing: v })} />,
     <TimeEstimationModule key="time" value={project.timeEstimation} mesh={project.meshAssessment} recad={project.reCadPostprocessing} objectSpecs={project.objectSpecs} onChange={(v) => handleUpdate({ timeEstimation: v })} />,
     <DeliverablesModule key="deliverables" value={project.deliverables} onChange={(v) => handleUpdate({ deliverables: v })} />,
-    <NativeCadModule key="nativecad" value={project.nativeCadSpec} onChange={(v) => handleUpdate({ nativeCadSpec: v })} />,
+    <NativeCadModule
+      key="nativecad"
+      value={project.nativeCadSpec}
+      onChange={(v) => handleUpdate({ nativeCadSpec: v })}
+      cadFormats={project.deliverables.cadFormats}
+      formats2D={project.deliverables.formats2D}
+      onCadFormatsChange={(v) => handleUpdate({ deliverables: { ...project.deliverables, cadFormats: v } })}
+      onFormats2DChange={(v) => handleUpdate({ deliverables: { ...project.deliverables, formats2D: v } })}
+    />,
     <GanttModule key="gantt" project={project} onChange={handleUpdate} />,
   ]
 

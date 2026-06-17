@@ -294,7 +294,7 @@ export default function MeshAssessmentModule({ value, onChange }: Props) {
           <Typography variant="body2" gutterBottom>
             {t('mesh.estimatedScanningHours')}: <strong>{value.estimatedScanningHours ?? 0} h</strong>
           </Typography>
-          <Box sx={{ px: 1 }}>
+          <Box sx={{ px: 1, pt: 3 }}>
             <Slider
               value={value.estimatedScanningHours ?? 0}
               min={0}
