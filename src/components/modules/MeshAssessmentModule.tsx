@@ -301,12 +301,13 @@ export default function MeshAssessmentModule({ value, onChange }: Props) {
               max={80}
               step={0.5}
               marks={[
-                { value: 0, label: '0' },
+                { value: 0, label: '0h' },
                 { value: 20, label: '20h' },
                 { value: 40, label: '40h' },
+                { value: 60, label: '60h' },
                 { value: 80, label: '80h' },
               ]}
-              valueLabelDisplay="auto"
+              valueLabelDisplay="on"
               onChange={(_, v) => set('estimatedScanningHours', v as number)}
             />
           </Box>

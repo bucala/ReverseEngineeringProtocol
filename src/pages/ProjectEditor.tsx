@@ -173,8 +173,14 @@ export default function ProjectEditor() {
         </Button>
         <Button
           variant="contained"
-          disabled={activeStep === STEPS.length - 1}
-          onClick={() => setActiveStep((s) => s + 1)}
+          onClick={() => {
+            if (activeStep === STEPS.length - 1) {
+              handleUpdate({ status: 'completed' })
+              navigate('/dashboard')
+            } else {
+              setActiveStep((s) => s + 1)
+            }
+          }}
         >
           {activeStep === STEPS.length - 1 ? t('common.finish') : t('common.next')}
         </Button>
