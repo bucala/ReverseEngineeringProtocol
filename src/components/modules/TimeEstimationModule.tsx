@@ -42,10 +42,12 @@ function computeAutoHours(mesh: MeshAssessment, recad: RECadPostprocessing) {
   const mult = complexityMult[mesh.geometryComplexity] ?? 1
 
   return {
+    preparation: parseFloat((scanBase * 0.2).toFixed(1)),
     scanning: scanBase,
     mesh: parseFloat((scanBase * 0.6 * mult).toFixed(1)),
     cad: cadBase || parseFloat((scanBase * 1.2 * mult).toFixed(1)),
     inspection: recad.drawingRequired ? 4 : 0,
+    reporting: parseFloat((Math.max(2, (scanBase + cadBase) * 0.1)).toFixed(1)),
     management: parseFloat(((scanBase + cadBase) * 0.1).toFixed(1)),
     travel: 0,
   }
@@ -66,10 +68,12 @@ export default function TimeEstimationModule({ value, mesh, recad, onChange }: P
     labelKey: string
     autoHours: number
   }> = [
+    { key: 'preparationEntry', labelKey: 'time.preparation', autoHours: autoHours.preparation },
     { key: 'scanningEntry', labelKey: 'time.scanning', autoHours: autoHours.scanning },
     { key: 'meshProcessingEntry', labelKey: 'time.meshProcessing', autoHours: autoHours.mesh },
     { key: 'cadEntry', labelKey: 'time.cad', autoHours: autoHours.cad },
     { key: 'inspectionEntry', labelKey: 'time.inspection', autoHours: autoHours.inspection },
+    { key: 'reportingEntry', labelKey: 'time.reporting', autoHours: autoHours.reporting },
     { key: 'managementEntry', labelKey: 'time.management', autoHours: autoHours.management },
     { key: 'travelEntry', labelKey: 'time.travel', autoHours: autoHours.travel },
   ]
