@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import { useTranslation } from 'react-i18next'
-import type { Deliverables, MeshFormat, CadOutputFormat, InspectionFormat, Format2D } from '@/types'
+import type { Deliverables, MeshFormat, InspectionFormat } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
 
 interface Props {
@@ -19,21 +19,6 @@ interface Props {
 }
 
 const MESH_FORMATS: MeshFormat[] = ['STL', 'OBJ', 'PLY', 'E57', 'FBX', '3MF']
-const CAD_FORMATS: CadOutputFormat[] = [
-  'CATIA_V5', 'CATIA_V6', 'SOLIDWORKS', 'NX', 'SOLIDEDGE', 'INVENTOR', 'CREO', 'STEP', 'IGES', 'PARASOLID',
-]
-const CAD_LABELS: Record<CadOutputFormat, string> = {
-  CATIA_V5: 'CATIA V5', CATIA_V6: 'CATIA V6', SOLIDWORKS: 'SolidWorks', NX: 'Siemens NX',
-  SOLIDEDGE: 'Solid Edge', INVENTOR: 'Inventor', CREO: 'PTC Creo',
-  STEP: 'STEP', IGES: 'IGES', PARASOLID: 'Parasolid',
-}
-const FORMAT_2D: Format2D[] = ['PDF_DRAWING', 'DXF', 'DWG', 'TIFF']
-const FORMAT_2D_LABELS: Record<Format2D, string> = {
-  PDF_DRAWING: 'PDF Drawing',
-  DXF: 'DXF (CNC/Laser)',
-  DWG: 'DWG (AutoCAD)',
-  TIFF: 'TIFF (hi-res)',
-}
 const INSPECTION_FORMATS: InspectionFormat[] = [
   'COLOR_MAP', 'DIMENSION_REPORT_PDF', 'GD_T', 'FIRST_ARTICLE', 'NOMINAL_ACTUAL',
 ]
@@ -115,40 +100,6 @@ export default function DeliverablesModule({ value, onChange }: Props) {
           <Divider />
         </Grid>
 
-        {/* CAD formats */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" gutterBottom>
-            {t('deliverables.cadFormats')}
-          </Typography>
-          <ToggleChips
-            options={CAD_FORMATS}
-            selected={value.cadFormats}
-            labels={CAD_LABELS}
-            onToggle={(v) => set('cadFormats', toggle(value.cadFormats, v))}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
-
-        {/* 2D Documentation */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" gutterBottom>
-            {t('deliverables.formats2D')}
-          </Typography>
-          <ToggleChips
-            options={FORMAT_2D}
-            selected={value.formats2D}
-            labels={FORMAT_2D_LABELS}
-            onToggle={(v) => set('formats2D', toggle(value.formats2D, v))}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
-
         {/* Inspection reports */}
         <Grid item xs={12}>
           <Typography variant="subtitle2" gutterBottom>
@@ -192,18 +143,14 @@ export default function DeliverablesModule({ value, onChange }: Props) {
           />
         </Grid>
 
-        {/* Deadline – year only */}
-        <Grid item xs={12} md={2}>
+        {/* Deadline – full date */}
+        <Grid item xs={12} sm={6} md={4}>
           <TextField
             label={t('deliverables.deadline')}
-            type="number"
+            type="date"
             value={value.deadline ?? ''}
-            onChange={(e) => {
-              const v = e.target.value
-              set('deadline', v ? v : null)
-            }}
-            inputProps={{ min: 2020, max: 2099, step: 1 }}
-            placeholder={String(new Date().getFullYear())}
+            onChange={(e) => set('deadline', e.target.value || null)}
+            InputLabelProps={{ shrink: true }}
             fullWidth
           />
         </Grid>

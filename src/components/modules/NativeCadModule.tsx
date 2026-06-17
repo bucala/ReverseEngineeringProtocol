@@ -10,21 +10,44 @@ import {
   Typography,
   Alert,
   Box,
+  Chip,
+  Divider,
 } from '@mui/material'
 import CodeIcon from '@mui/icons-material/Code'
 import { useTranslation } from 'react-i18next'
-import type { NativeCadSpec, CadSystem, DrawingStandard } from '@/types'
+import type { NativeCadSpec, CadSystem, DrawingStandard, CadOutputFormat, Format2D } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
+
+const CAD_OUTPUT_FORMATS: CadOutputFormat[] = [
+  'CATIA_V5', 'CATIA_V6', 'SOLIDWORKS', 'NX', 'SOLIDEDGE', 'INVENTOR', 'CREO', 'STEP', 'IGES', 'PARASOLID',
+]
+const CAD_OUTPUT_LABELS: Record<CadOutputFormat, string> = {
+  CATIA_V5: 'CATIA V5', CATIA_V6: 'CATIA V6', SOLIDWORKS: 'SolidWorks', NX: 'Siemens NX',
+  SOLIDEDGE: 'Solid Edge', INVENTOR: 'Inventor', CREO: 'PTC Creo',
+  STEP: 'STEP', IGES: 'IGES', PARASOLID: 'Parasolid',
+}
+const FORMATS_2D: Format2D[] = ['PDF_DRAWING', 'DXF', 'DWG', 'TIFF']
+const FORMATS_2D_LABELS: Record<Format2D, string> = {
+  PDF_DRAWING: 'PDF Drawing', DXF: 'DXF (CNC/Laser)', DWG: 'DWG (AutoCAD)', TIFF: 'TIFF (hi-res)',
+}
+
+function toggleArr<T>(arr: T[], val: T): T[] {
+  return arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]
+}
 
 interface Props {
   value: NativeCadSpec
   onChange: (v: NativeCadSpec) => void
+  cadFormats: CadOutputFormat[]
+  formats2D: Format2D[]
+  onCadFormatsChange: (v: CadOutputFormat[]) => void
+  onFormats2DChange: (v: Format2D[]) => void
 }
 
 const CAD_SYSTEMS: CadSystem[] = ['NX', 'SOLIDWORKS', 'INVENTOR', 'CATIA_V5', 'CATIA_V6', 'CREO', 'SOLIDEDGE', 'FUSION360']
 const DRAWING_STANDARDS: DrawingStandard[] = ['ISO', 'ANSI', 'DIN', 'custom']
 
-export default function NativeCadModule({ value, onChange }: Props) {
+export default function NativeCadModule({ value, onChange, cadFormats, formats2D, onCadFormatsChange, onFormats2DChange }: Props) {
   const { t } = useTranslation()
 
   const set = <K extends keyof NativeCadSpec>(key: K, val: NativeCadSpec[K]) =>
@@ -216,8 +239,48 @@ export default function NativeCadModule({ value, onChange }: Props) {
               </Grid>
             )}
 
+            {/* CAD output formats */}
+            <Grid item xs={12}>
+              <Divider sx={{ mb: 2 }} />
+              <Typography variant="subtitle2" gutterBottom>
+                {t('deliverables.cadFormats')}
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {CAD_OUTPUT_FORMATS.map((fmt) => (
+                  <Chip
+                    key={fmt}
+                    label={CAD_OUTPUT_LABELS[fmt]}
+                    onClick={() => onCadFormatsChange(toggleArr(cadFormats, fmt))}
+                    color={cadFormats.includes(fmt) ? 'primary' : 'default'}
+                    variant={cadFormats.includes(fmt) ? 'filled' : 'outlined'}
+                    clickable
+                  />
+                ))}
+              </Box>
+            </Grid>
+
+            {/* 2D Documentation */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" gutterBottom sx={{ mt: 1 }}>
+                {t('deliverables.formats2D')}
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {FORMATS_2D.map((fmt) => (
+                  <Chip
+                    key={fmt}
+                    label={FORMATS_2D_LABELS[fmt]}
+                    onClick={() => onFormats2DChange(toggleArr(formats2D, fmt))}
+                    color={formats2D.includes(fmt) ? 'primary' : 'default'}
+                    variant={formats2D.includes(fmt) ? 'filled' : 'outlined'}
+                    clickable
+                  />
+                ))}
+              </Box>
+            </Grid>
+
             {/* Notes */}
             <Grid item xs={12}>
+              <Divider sx={{ mb: 1, mt: 1 }} />
               <TextField
                 label={t('nativeCad.notes')}
                 value={value.notes}
@@ -225,6 +288,7 @@ export default function NativeCadModule({ value, onChange }: Props) {
                 multiline
                 rows={3}
                 fullWidth
+                sx={{ mt: 1 }}
               />
             </Grid>
           </>

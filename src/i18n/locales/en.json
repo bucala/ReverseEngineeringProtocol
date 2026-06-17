@@ -110,7 +110,11 @@
     "notes": "Object Description / Notes",
     "removeImage": "Remove Image",
     "addObject": "Add object / part / assembly",
-    "objectIndex": "Object {{n}}"
+    "objectIndex": "Object {{n}}",
+    "model3D": "3D Model",
+    "uploadModel": "Upload 3D Model (STL / OBJ)",
+    "removeModel": "Remove 3D Model",
+    "modelTooBig": "File is too large (max 15 MB)"
   },
   "rePurpose": {
     "title": "Purpose of Reverse Engineering",
@@ -265,7 +269,9 @@
     "ratePerHour": "Rate (€/h)",
     "totalHours": "Total Time (h)",
     "subtotal": "Subtotal",
-    "totalCost": "Total Cost"
+    "totalCost": "Total Cost",
+    "aiEstimate": "AI Estimate",
+    "estimating": "Computing estimate..."
   },
   "deliverables": {
     "title": "Deliverables Specification",
@@ -326,7 +332,9 @@
       "light": "Light",
       "dark": "Dark"
     },
-    "defaultRealizator": "Default Contractor"
+    "defaultRealizator": "Default Contractor",
+    "anthropicApiKey": "Anthropic API Key",
+    "anthropicApiKeyHint": "Optional: for AI time estimation using Claude"
   },
   "dashboard": {
     "recentProjects": "Recent Projects",
@@ -336,6 +344,35 @@
       "draft": "Drafts",
       "completed": "Completed"
     }
+  },
+  "template": {
+    "manage": "Templates",
+    "saveAs": "Save as Template",
+    "apply": "Apply Template",
+    "name": "Template Name",
+    "description": "Template Description",
+    "save": "Save Template",
+    "applyBtn": "Apply",
+    "noTemplates": "No templates",
+    "confirmApply": "This will overwrite project settings with the template configuration. Continue?",
+    "deleted": "Template deleted",
+    "saved": "Template saved"
+  },
+  "signature": {
+    "title": "Electronic Signature",
+    "realizator": "Contractor Signature",
+    "ziadatel": "Client Signature",
+    "clear": "Clear",
+    "save": "Save Signatures",
+    "sign": "Sign Protocol"
+  },
+  "gantt": {
+    "title": "Project Timeline",
+    "startDate": "Start Date",
+    "phase": "Phase",
+    "duration": "Duration (days)",
+    "startDateRequired": "Enter a start date to display the Gantt chart",
+    "totalDuration": "Total project duration"
   },
   "validation": {
     "required": "This field is required",

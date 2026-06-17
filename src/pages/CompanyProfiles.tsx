@@ -85,8 +85,8 @@ export default function CompanyProfiles() {
       const json = await readFileAsText(file)
       const imported = importCompanyProfiles(json)
       importProfiles(imported, true)
-    } catch {
-      alert(t('common.error') + ': invalid file')
+    } catch (err) {
+      alert(t('common.error') + ': ' + (err instanceof Error ? err.message : 'invalid file'))
     }
     e.target.value = ''
   }
