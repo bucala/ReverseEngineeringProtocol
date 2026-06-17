@@ -1,4 +1,5 @@
 import ReactDOMServer from 'react-dom/server'
+import QRCode from 'qrcode'
 import type { Project } from '@/types'
 
 // ─── Inline translations ──────────────────────────────────────────────────────
@@ -282,9 +283,10 @@ function ChipCell({ items }: { items: string[] }) {
 interface ProtocolPrintProps {
   project: Project
   t: (key: string) => string
+  qrDataUrl?: string
 }
 
-function ProtocolPrint({ project, t }: ProtocolPrintProps) {
+function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
   const objectSpecs = project.objectSpecs?.length
     ? project.objectSpecs
     : project.objectSpec ? [project.objectSpec] : []
@@ -343,7 +345,10 @@ function ProtocolPrint({ project, t }: ProtocolPrintProps) {
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* Header */}
-      <div className="header">
+      <div className="header" style={{ position: 'relative' }}>
+        {qrDataUrl && (
+          <img src={qrDataUrl} style={{ width: 80, height: 80, position: 'absolute', top: 0, right: 0 }} alt="QR" />
+        )}
         <div className="company-block">
           {realizator?.logoBase64 && (
             <img src={realizator.logoBase64} alt="logo" className="company-logo" />
@@ -602,13 +607,19 @@ function ProtocolPrint({ project, t }: ProtocolPrintProps) {
           <div className="sig-block">
             <div className="sig-title">{t('realizatorSig')}</div>
             {realizator?.name && <div style={{ fontSize: '9pt', color: '#546E7A' }}>{realizator.name}</div>}
-            <div className="sig-line">{t('date')}: _______________________</div>
+            {project.realizatorSignature && (
+              <img src={project.realizatorSignature} style={{ maxWidth: 200, maxHeight: 80, display: 'block', marginTop: 8 }} alt="signature" />
+            )}
+            <div className="sig-line">{t('date')}: {project.signedAt ? new Date(project.signedAt).toLocaleDateString('sk-SK') : '_______________________'}</div>
             <div className="sig-line" style={{ marginTop: 8 }}>{t('stamp')}:</div>
           </div>
           <div className="sig-block">
             <div className="sig-title">{t('ziadatelSig')}</div>
             {ziadatel?.name && <div style={{ fontSize: '9pt', color: '#546E7A' }}>{ziadatel.name}</div>}
-            <div className="sig-line">{t('date')}: _______________________</div>
+            {project.ziadatelSignature && (
+              <img src={project.ziadatelSignature} style={{ maxWidth: 200, maxHeight: 80, display: 'block', marginTop: 8 }} alt="signature" />
+            )}
+            <div className="sig-line">{t('date')}: {project.signedAt ? new Date(project.signedAt).toLocaleDateString('sk-SK') : '_______________________'}</div>
             <div className="sig-line" style={{ marginTop: 8 }}>{t('stamp')}:</div>
           </div>
         </div>
@@ -619,12 +630,19 @@ function ProtocolPrint({ project, t }: ProtocolPrintProps) {
 
 // ─── Export function ──────────────────────────────────────────────────────────
 
-export function printProtocol(project: Project, language: string): void {
+export async function printProtocol(project: Project, language: string): Promise<void> {
   const translations = getTranslations(language)
   const t = (key: string): string => translations[key] ?? key
 
+  let qrDataUrl: string | undefined
+  try {
+    qrDataUrl = await QRCode.toDataURL(project.protocolNumber, { width: 80, margin: 1 })
+  } catch {
+    // QR generation failed - proceed without it
+  }
+
   const html = ReactDOMServer.renderToStaticMarkup(
-    <ProtocolPrint project={project} t={t} />
+    <ProtocolPrint project={project} t={t} qrDataUrl={qrDataUrl} />
   )
 
   const fullHtml = `<!DOCTYPE html>

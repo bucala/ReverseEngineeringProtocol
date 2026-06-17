@@ -7,12 +7,14 @@ interface AppState {
   language: AppLanguage
   themeMode: AppThemeMode
   sidebarOpen: boolean
+  anthropicApiKey: string
 
   setLanguage: (lang: AppLanguage) => void
   setThemeMode: (mode: AppThemeMode) => void
   toggleTheme: () => void
   setSidebarOpen: (open: boolean) => void
   toggleSidebar: () => void
+  setAnthropicApiKey: (key: string) => void
 }
 
 export const useAppStore = create<AppState>()(
@@ -21,6 +23,7 @@ export const useAppStore = create<AppState>()(
       language: 'sk',
       themeMode: 'light',
       sidebarOpen: true,
+      anthropicApiKey: '',
 
       setLanguage: (lang) => {
         i18n.changeLanguage(lang)
@@ -35,6 +38,8 @@ export const useAppStore = create<AppState>()(
       setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
       toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
+
+      setAnthropicApiKey: (key) => set({ anthropicApiKey: key }),
     }),
     {
       name: 'reveng_app_settings',

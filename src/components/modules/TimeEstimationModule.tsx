@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Grid,
   TextField,
@@ -17,18 +17,23 @@ import {
   ToggleButton,
   Divider,
   Box,
+  Button,
+  CircularProgress,
+  Tooltip,
 } from '@mui/material'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import { useTranslation } from 'react-i18next'
-import type { TimeEstimation, MeshAssessment, RECadPostprocessing, TimeEntry } from '@/types'
+import type { TimeEstimation, MeshAssessment, RECadPostprocessing, TimeEntry, ObjectSpec } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
+import { useAppStore } from '@/store/appStore'
 
 interface Props {
   value: TimeEstimation
   mesh: MeshAssessment
   recad: RECadPostprocessing
+  objectSpecs?: ObjectSpec[]
   onChange: (v: TimeEstimation) => void
 }
 
@@ -53,8 +58,116 @@ function computeAutoHours(mesh: MeshAssessment, recad: RECadPostprocessing) {
   }
 }
 
-export default function TimeEstimationModule({ value, mesh, recad, onChange }: Props) {
+interface SmartEstimate {
+  scanning: number
+  mesh: number
+  cad: number
+  preparation: number
+  reporting: number
+  management: number
+  travel: number
+  inspection: number
+}
+
+function computeSmartEstimate(mesh: MeshAssessment, recad: RECadPostprocessing, objectSpecs: ObjectSpec[]): SmartEstimate {
+  // Base scanning hours from method
+  const scanBaseMap: Record<string, number> = {
+    structured_light: 4,
+    laser_line: 3,
+    ct_scan: 8,
+    photogrammetry: 6,
+    cmm: 5,
+    handheld: 2,
+  }
+  let scanBase = scanBaseMap[mesh.scanningMethod] ?? 4
+
+  // Volume factor from bounding boxes
+  const totalVolume = objectSpecs.reduce((sum, s) => {
+    const x = s.boundingBox.x ?? 100
+    const y = s.boundingBox.y ?? 100
+    const z = s.boundingBox.z ?? 100
+    return sum + x * y * z
+  }, 0)
+  if (totalVolume > 0) {
+    const volFactor = Math.max(0.5, Math.min(3.0, totalVolume / 1000000))
+    scanBase *= volFactor
+  }
+
+  // Complexity multiplier
+  const complexityMult: Record<string, number> = { simple: 0.7, moderate: 1.0, complex: 1.5, freeform: 2.0 }
+  const cMult = complexityMult[mesh.geometryComplexity] ?? 1.0
+  scanBase *= cMult
+
+  // Precision multiplier
+  const precisionMult: Record<string, number> = { standard: 1.0, high_precision: 1.4, metrology: 2.0 }
+  scanBase *= precisionMult[mesh.precisionLevel] ?? 1.0
+
+  // Additions
+  if (mesh.surfacePrepRequired) scanBase += 1
+  if (mesh.requiresCtScan) scanBase += 3
+  if (mesh.hasUndercutFeatures) scanBase += 1
+  if (mesh.hasInternalFeatures) scanBase += 1.5
+  if (mesh.hasDeepCavities) scanBase += 1
+
+  // CAD hours from strategy
+  let cadBase = scanBase * 1.2
+  if (recad.strategy === 'design_intent') cadBase *= 1.4
+  if (recad.featureBasedModeling) cadBase *= 1.2
+  if (recad.drawingRequired) cadBase += 6
+
+  const r = (n: number) => parseFloat(n.toFixed(1))
+
+  return {
+    scanning: r(scanBase),
+    mesh: r(scanBase * 0.5),
+    cad: r(cadBase),
+    preparation: r(scanBase * 0.25),
+    reporting: r(Math.max(2, (scanBase + cadBase) * 0.1)),
+    management: r((scanBase + cadBase) * 0.1),
+    inspection: recad.drawingRequired ? 4 : 0,
+    travel: 0,
+  }
+}
+
+async function fetchClaudeEstimate(
+  apiKey: string,
+  mesh: MeshAssessment,
+  recad: RECadPostprocessing,
+  objectSpecs: ObjectSpec[]
+): Promise<SmartEstimate | null> {
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        messages: [{
+          role: 'user',
+          content: `Estimate time in hours for a reverse engineering project. Object: ${objectSpecs.map((s) => s.name).join(', ') || 'unknown'}, complexity: ${mesh.geometryComplexity}, scanning: ${mesh.scanningMethod}, precision: ${mesh.precisionLevel}, CAD strategy: ${recad.strategy}. Reply with ONLY a JSON object: {"scanning": N, "mesh": N, "cad": N, "preparation": N, "reporting": N, "management": N, "travel": 0, "inspection": 0}`,
+        }],
+      }),
+    })
+    if (!response.ok) return null
+    const data = await response.json()
+    const text = data.content?.[0]?.text ?? ''
+    const match = text.match(/\{[^}]+\}/)
+    if (!match) return null
+    return JSON.parse(match[0]) as SmartEstimate
+  } catch {
+    return null
+  }
+}
+
+export default function TimeEstimationModule({ value, mesh, recad, objectSpecs = [], onChange }: Props) {
   const { t } = useTranslation()
+  const { anthropicApiKey } = useAppStore()
+  const [estimating, setEstimating] = useState(false)
+
   const set = <K extends keyof TimeEstimation>(key: K, val: TimeEstimation[K]) =>
     onChange({ ...value, [key]: val })
 
@@ -62,6 +175,37 @@ export default function TimeEstimationModule({ value, mesh, recad, onChange }: P
     set(key, { ...(value[key] as TimeEntry), ...patch })
 
   const autoHours = useMemo(() => computeAutoHours(mesh, recad), [mesh, recad])
+
+  const handleAiEstimate = async () => {
+    setEstimating(true)
+    try {
+      let estimate: SmartEstimate | null = null
+
+      if (anthropicApiKey) {
+        estimate = await fetchClaudeEstimate(anthropicApiKey, mesh, recad, objectSpecs)
+      }
+
+      if (!estimate) {
+        estimate = computeSmartEstimate(mesh, recad, objectSpecs)
+      }
+
+      // Apply estimate to manual entries and switch to manual mode
+      onChange({
+        ...value,
+        mode: 'manual',
+        preparationEntry: { ...value.preparationEntry, hours: estimate.preparation },
+        scanningEntry: { ...value.scanningEntry, hours: estimate.scanning },
+        meshProcessingEntry: { ...value.meshProcessingEntry, hours: estimate.mesh },
+        cadEntry: { ...value.cadEntry, hours: estimate.cad },
+        inspectionEntry: { ...value.inspectionEntry, hours: estimate.inspection },
+        reportingEntry: { ...value.reportingEntry, hours: estimate.reporting },
+        managementEntry: { ...value.managementEntry, hours: estimate.management },
+        travelEntry: { ...value.travelEntry, hours: estimate.travel },
+      })
+    } finally {
+      setEstimating(false)
+    }
+  }
 
   const entries: Array<{
     key: keyof TimeEstimation
@@ -99,25 +243,40 @@ export default function TimeEstimationModule({ value, mesh, recad, onChange }: P
   return (
     <SectionCard title={t('time.title')} icon={<ScheduleIcon />}>
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8}>
           <Typography variant="subtitle2" gutterBottom>
             {t('time.mode')}
           </Typography>
-          <ToggleButtonGroup
-            value={value.mode}
-            exclusive
-            onChange={(_, v) => v && set('mode', v)}
-            size="small"
-          >
-            <ToggleButton value="auto">
-              <AutoFixHighIcon sx={{ mr: 0.5 }} fontSize="small" />
-              {t('time.modes.auto')}
-            </ToggleButton>
-            <ToggleButton value="manual">
-              <EditNoteIcon sx={{ mr: 0.5 }} fontSize="small" />
-              {t('time.modes.manual')}
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+            <ToggleButtonGroup
+              value={value.mode}
+              exclusive
+              onChange={(_, v) => v && set('mode', v)}
+              size="small"
+            >
+              <ToggleButton value="auto">
+                <AutoFixHighIcon sx={{ mr: 0.5 }} fontSize="small" />
+                {t('time.modes.auto')}
+              </ToggleButton>
+              <ToggleButton value="manual">
+                <EditNoteIcon sx={{ mr: 0.5 }} fontSize="small" />
+                {t('time.modes.manual')}
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <Tooltip title={anthropicApiKey ? t('time.aiEstimate') : `${t('time.aiEstimate')} (${t('settings.title')} – API Key)`}>
+              <span>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={estimating ? <CircularProgress size={14} /> : <AutoFixHighIcon />}
+                  onClick={handleAiEstimate}
+                  disabled={estimating}
+                >
+                  {estimating ? t('time.estimating') : t('time.aiEstimate')}
+                </Button>
+              </span>
+            </Tooltip>
+          </Box>
         </Grid>
         <Grid item xs={12} md={2}>
           <FormControl fullWidth>

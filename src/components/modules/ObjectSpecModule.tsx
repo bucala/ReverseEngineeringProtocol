@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import {
   Accordion,
   AccordionSummary,
@@ -23,16 +23,20 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import ViewInArIcon from '@mui/icons-material/ViewInAr'
 import CategoryIcon from '@mui/icons-material/Category'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import type { ObjectSpec, ObjectImage, REPurpose } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
+import ModelViewer3D from '@/components/common/ModelViewer3D'
 import { readFileAsDataURL } from '@/utils/fileFormat'
 
 const UNITS = ['mm', 'cm', 'm', 'inch'] as const
 const RE_PURPOSES: REPurpose[] = ['spare_part', 'design_innovation', 'archiving', 'documentation', 'inspection', 'other']
+
+const MAX_MODEL_SIZE = 15 * 1024 * 1024 // 15 MB
 
 const emptySpec = (): ObjectSpec => ({
   name: '',
@@ -44,6 +48,7 @@ const emptySpec = (): ObjectSpec => ({
   notes: '',
   rePurpose: [],
   rePurposeNotes: '',
+  model3D: null,
 })
 
 // ─── Image dropzone (per-object) ─────────────────────────────────────────────
@@ -113,6 +118,91 @@ function ImageDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: Obj
             </Paper>
           ))}
         </Stack>
+      )}
+    </Box>
+  )
+}
+
+// ─── 3D Model dropzone ────────────────────────────────────────────────────────
+
+function Model3DDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: ObjectSpec) => void }) {
+  const { t } = useTranslation()
+  const [modelError, setModelError] = useState<string | null>(null)
+
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0]
+      if (!file) return
+      if (file.size > MAX_MODEL_SIZE) {
+        setModelError(t('object.modelTooBig'))
+        return
+      }
+      setModelError(null)
+      const ext = file.name.split('.').pop()?.toLowerCase()
+      const format = ext === 'stl' ? 'stl' : 'obj'
+      try {
+        const arrayBuffer = await file.arrayBuffer()
+        const uint8 = new Uint8Array(arrayBuffer)
+        let binary = ''
+        for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i])
+        const dataBase64 = btoa(binary)
+        onChange({ ...spec, model3D: { dataBase64, format, filename: file.name, filesize: file.size } })
+      } catch {
+        setModelError(t('common.error'))
+      }
+    },
+    [spec, onChange, t]
+  )
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { 'model/stl': ['.stl'], 'application/octet-stream': ['.stl', '.obj'], 'text/plain': ['.obj'] },
+    multiple: false,
+  })
+
+  const remove3D = () => onChange({ ...spec, model3D: null })
+
+  return (
+    <Box>
+      {!spec.model3D ? (
+        <Box
+          {...getRootProps()}
+          sx={{
+            border: '2px dashed',
+            borderColor: isDragActive ? 'primary.main' : 'divider',
+            borderRadius: 2,
+            p: 2,
+            textAlign: 'center',
+            cursor: 'pointer',
+            bgcolor: isDragActive ? 'action.hover' : 'background.default',
+            transition: 'all 0.2s',
+          }}
+        >
+          <input {...getInputProps()} />
+          <ViewInArIcon sx={{ fontSize: 32, color: 'text.disabled', mb: 0.5 }} />
+          <Typography variant="caption" display="block" color="text.secondary">
+            {t('object.uploadModel')}
+          </Typography>
+          {modelError && (
+            <Typography variant="caption" color="error" display="block" sx={{ mt: 0.5 }}>
+              {modelError}
+            </Typography>
+          )}
+        </Box>
+      ) : (
+        <Box>
+          <Box sx={{ height: 280, borderRadius: 1, overflow: 'hidden', mb: 1 }}>
+            <ModelViewer3D dataBase64={spec.model3D.dataBase64} format={spec.model3D.format} />
+          </Box>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="caption" color="text.secondary">
+              {spec.model3D.filename} ({(spec.model3D.filesize / 1024 / 1024).toFixed(2)} MB)
+            </Typography>
+            <Button size="small" color="error" startIcon={<DeleteIcon />} onClick={remove3D}>
+              {t('object.removeModel')}
+            </Button>
+          </Stack>
+        </Box>
       )}
     </Box>
   )
@@ -236,6 +326,14 @@ function ObjectForm({
               {t('object.images')}
             </Typography>
             <ImageDropzone spec={spec} onChange={onChange} />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 1 }} />
+            <Typography variant="caption" color="text.secondary" gutterBottom display="block">
+              {t('object.model3D')}
+            </Typography>
+            <Model3DDropzone spec={spec} onChange={onChange} />
           </Grid>
         </Grid>
       </AccordionDetails>

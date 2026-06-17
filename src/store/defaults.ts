@@ -86,6 +86,7 @@ export const defaultObjectSpec = (): ObjectSpec => ({
   notes: '',
   rePurpose: [],
   rePurposeNotes: '',
+  model3D: null,
 })
 
 export const defaultNativeCadSpec = (): NativeCadSpec => ({
@@ -124,5 +125,9 @@ export const createDefaultProject = (): Project => {
     deliverables: defaultDeliverables(),
     nativeCadSpec: defaultNativeCadSpec(),
     internalNotes: '',
+    realizatorSignature: null,
+    ziadatelSignature: null,
+    signedAt: null,
+    startDate: null,
   }
 }
