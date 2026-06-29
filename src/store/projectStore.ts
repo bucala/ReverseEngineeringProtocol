@@ -8,10 +8,6 @@ interface ImportOptions {
   asCopy?: boolean
 }
 
-interface ImportOptions {
-  asCopy?: boolean
-}
-
 interface ProjectState {
   projects: Project[]
   activeProjectId: string | null

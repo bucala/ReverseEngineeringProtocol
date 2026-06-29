@@ -386,6 +386,69 @@
     "nativeCadSystemMissing": "Chýba natívny CAD systém"
   },
   "advanced": {
-    "title": "Pokročilé funkcie"
+    "title": "Pokročilé funkcie",
+    "roadmapTitle": "Pokročilé roadmap funkcie",
+    "roadmapSubtitle": "Workflow, ponuky, skóre rizika, odovzdanie, integrácie, AI a compliance",
+    "lifecycleApprovals": "1. Životný cyklus a schvaľovanie",
+    "workflowStage": "Fáza workflow",
+    "approvalRecords": "Záznamy schvaľovania",
+    "checklistCompletion": "Dokončenie checklistu",
+    "quotesRateCards": "2. Ponuky a sadzobníky",
+    "rateCardEntries": "Položky sadzobníka",
+    "estimatedHours": "Odhadované hodiny",
+    "scanRiskRecommendation": "3. Riziko skenovania a odporúčaná metóda",
+    "recommendedMethod": "Odporúčaná metóda",
+    "cadReDelivery": "4. CAD, RE softvér a delivery manifest",
+    "reSoftwareSelected": "Vybraný RE softvér",
+    "manifestItems": "Položky manifestu",
+    "cadCompatibilityNotes": "Poznámky CAD kompatibility",
+    "reSoftwareSupport": "Podporuje Geomagic Design X, QUICKSURFACE, PolyWorks, Rhino a Rhino + Meshsurface v kroku RE/CAD.",
+    "capacityKpiReporting": "5. Kapacity, KPI a reporting",
+    "resources": "Zdroje",
+    "revenue": "Výnos",
+    "margin": "Marža",
+    "overdueRisk": "Riziko omeškania",
+    "cloudIntegrations": "6. Cloud, CRM/účtovníctvo a CAD/PDM integrácie",
+    "cloudTargetPath": "Cieľová cloud cesta",
+    "accounting": "Účtovníctvo",
+    "aiAssistedWork": "7. AI asistovaná práca s protokolom",
+    "generateTechnicalSummary": "Generovať technické zhrnutie",
+    "checkProjectConsistency": "Kontrolovať konzistenciu projektu",
+    "translateNotes": "Prekladať poznámky",
+    "securityCompliance": "8. Bezpečnosť, compliance, mobil a desktop",
+    "confidentiality": "Dôvernosť",
+    "lockAfterSignature": "Uzamknúť po podpise",
+    "mobilePhotoMode": "Mobilný režim fotodokumentácie",
+    "desktopSecureStorage": "Bezpečné desktop úložisko",
+    "centralizedSummary": "Tento modul centralizuje všetkých 12 navrhovaných roadmap oblastí ako štruktúrované projektové dáta: životný cyklus, ponuky, scan intelligence, CAD/odovzdanie, médiá, plánovanie, reporting, integrácie, AI, compliance, revízie a mobilné/desktop workflow.",
+    "workflowStages": {
+      "draft": "Návrh",
+      "ready_for_review": "Pripravené na kontrolu",
+      "internal_review": "Interná kontrola",
+      "client_approval": "Schválenie zákazníkom",
+      "approved": "Schválené",
+      "in_production": "Vo výrobe",
+      "delivered": "Odovzdané",
+      "closed": "Uzavreté"
+    },
+    "riskLevels": {
+      "low": "nízke",
+      "medium": "stredné",
+      "high": "vysoké",
+      "critical": "kritické"
+    },
+    "riskWarnings": {
+      "difficultSurface": "Náročný optický povrch",
+      "complexGeometry": "Komplexná/freeform geometria",
+      "hiddenGeometry": "Skrytá/interná geometria",
+      "thinWalls": "Tenké steny",
+      "tightTolerance": "Tesná tolerancia"
+    },
+    "confidentialityLevels": {
+      "public": "verejné",
+      "internal": "interné",
+      "confidential": "dôverné",
+      "nda": "NDA"
+    }
   }
 }

@@ -386,6 +386,69 @@
     "nativeCadSystemMissing": "Native CAD system is missing"
   },
   "advanced": {
-    "title": "Advanced features"
+    "title": "Advanced features",
+    "roadmapTitle": "Advanced roadmap features",
+    "roadmapSubtitle": "Workflow, quotes, risk scoring, delivery, integrations, AI and compliance",
+    "lifecycleApprovals": "1. Lifecycle & approvals",
+    "workflowStage": "Workflow stage",
+    "approvalRecords": "Approval records",
+    "checklistCompletion": "Checklist completion",
+    "quotesRateCards": "2. Quotes & rate cards",
+    "rateCardEntries": "Rate card entries",
+    "estimatedHours": "Estimated hours",
+    "scanRiskRecommendation": "3. Scan risk & method recommendation",
+    "recommendedMethod": "Recommended method",
+    "cadReDelivery": "4. CAD, RE software & delivery manifest",
+    "reSoftwareSelected": "RE software selected",
+    "manifestItems": "Manifest items",
+    "cadCompatibilityNotes": "CAD compatibility notes",
+    "reSoftwareSupport": "Supports Geomagic Design X, QUICKSURFACE, PolyWorks, Rhino and Rhino + Meshsurface in the RE/CAD step.",
+    "capacityKpiReporting": "5. Capacity, KPI & reporting",
+    "resources": "Resources",
+    "revenue": "Revenue",
+    "margin": "Margin",
+    "overdueRisk": "Overdue risk",
+    "cloudIntegrations": "6. Cloud, CRM/accounting & CAD/PDM integrations",
+    "cloudTargetPath": "Cloud target path",
+    "accounting": "Accounting",
+    "aiAssistedWork": "7. AI assisted protocol work",
+    "generateTechnicalSummary": "Generate technical summary",
+    "checkProjectConsistency": "Check project consistency",
+    "translateNotes": "Translate notes",
+    "securityCompliance": "8. Security, compliance, mobile & desktop",
+    "confidentiality": "Confidentiality",
+    "lockAfterSignature": "Lock after signature",
+    "mobilePhotoMode": "Mobile photo mode",
+    "desktopSecureStorage": "Desktop secure storage",
+    "centralizedSummary": "This module centralizes all 12 proposed roadmap areas as structured project data: lifecycle, quotes, scan intelligence, CAD/delivery, media, planning, reporting, integrations, AI, compliance, revisions and mobile/desktop workflows.",
+    "workflowStages": {
+      "draft": "Draft",
+      "ready_for_review": "Ready for review",
+      "internal_review": "Internal review",
+      "client_approval": "Client approval",
+      "approved": "Approved",
+      "in_production": "In production",
+      "delivered": "Delivered",
+      "closed": "Closed"
+    },
+    "riskLevels": {
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "critical": "critical"
+    },
+    "riskWarnings": {
+      "difficultSurface": "Difficult optical surface",
+      "complexGeometry": "Complex/freeform geometry",
+      "hiddenGeometry": "Hidden/internal geometry",
+      "thinWalls": "Thin walls",
+      "tightTolerance": "Tight tolerance"
+    },
+    "confidentialityLevels": {
+      "public": "public",
+      "internal": "internal",
+      "confidential": "confidential",
+      "nda": "NDA"
+    }
   }
 }
