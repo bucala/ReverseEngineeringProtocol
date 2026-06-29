@@ -6,6 +6,7 @@ import type {
   ObjectSpec,
   Project,
   NativeCadSpec,
+  AdvancedProjectFeatures,
 } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -45,6 +46,9 @@ export const defaultRECad = (): RECadPostprocessing => ({
     watertight: false,
     decimation: false,
   },
+  reverseEngineeringSoftware: [],
+  reverseEngineeringSoftwareOther: '',
+  scanToCadPreparationNotes: '',
   estimatedCadHours: null,
   notes: '',
 })
@@ -105,13 +109,46 @@ export const defaultNativeCadSpec = (): NativeCadSpec => ({
   notes: '',
 })
 
-export const createDefaultProject = (): Project => {
+
+export const defaultAdvancedFeatures = (): AdvancedProjectFeatures => ({
+  workflowStage: 'draft',
+  approvals: [],
+  checklist: [
+    { id: 'project-basic', area: 'project', label: 'Project header completed', completed: false, required: true },
+    { id: 'object-basic', area: 'object', label: 'Object and dimensions documented', completed: false, required: true },
+    { id: 'mesh-risk', area: 'mesh', label: 'Scan risks reviewed', completed: false, required: true },
+    { id: 'recad-output', area: 'recad', label: 'RE software and CAD outputs selected', completed: false, required: true },
+    { id: 'deliverables-deadline', area: 'deliverables', label: 'Deliverables and deadline confirmed', completed: false, required: true },
+  ],
+  quoteVariants: [
+    { id: 'basic', name: 'basic', description: 'Raw/optimized mesh and basic cleanup', includedDeliverables: ['Raw mesh', 'Optimized mesh'], totalPrice: 0, currency: 'EUR' },
+    { id: 'standard', name: 'standard', description: 'Mesh cleanup plus neutral CAD output', includedDeliverables: ['Optimized mesh', 'STEP/IGES'], totalPrice: 0, currency: 'EUR' },
+    { id: 'premium', name: 'premium', description: 'Parametric CAD, drawings and inspection support', includedDeliverables: ['Parametric CAD', '2D drawing', 'Inspection report'], totalPrice: 0, currency: 'EUR' },
+  ],
+  rateCard: [
+    { id: 'scanning', label: 'Scanning', hourlyRate: 65, currency: 'EUR' },
+    { id: 'mesh', label: 'Mesh processing', hourlyRate: 55, currency: 'EUR' },
+    { id: 'cad', label: 'CAD reconstruction', hourlyRate: 60, currency: 'EUR' },
+  ],
+  scanRisk: { score: 0, level: 'low', warnings: [], recommendations: [], recommendedMethod: 'structured_light' },
+  materialKnowledge: [],
+  deliveryManifest: [],
+  cadCompatibility: [],
+  capacityResources: [],
+  kpiSnapshot: { estimatedRevenue: 0, estimatedHours: 0, marginPercent: 0, overdueRisk: 'low' },
+  cloudDelivery: { provider: 'other', targetPath: '', shareUrl: '', expiresAt: null },
+  businessIntegrations: { crmSystem: '', accountingSystem: '', exportFormat: 'csv' },
+  aiAssistance: { generateTechnicalSummary: true, checkConsistency: true, translateNotes: false, lastSummary: '' },
+  compliance: { confidentiality: 'internal', watermark: '', lockAfterSignature: true, invalidateSignaturesOnChange: true },
+  platformWorkflow: { mobilePhotoMode: true, desktopSecureStorage: true, autoBackupPath: '' },
+})
+
+export const createDefaultProject = (protocolNumber?: string): Project => {
   const now = new Date().toISOString()
   const year = new Date().getFullYear()
-  const random = Math.floor(Math.random() * 9000) + 1000
   return {
     id: uuidv4(),
-    protocolNumber: `RE-${year}-${random}`,
+    protocolNumber: protocolNumber ?? `RE-${year}-0001`,
     title: '',
     status: 'draft',
     createdAt: now,
@@ -129,5 +166,9 @@ export const createDefaultProject = (): Project => {
     ziadatelSignature: null,
     signedAt: null,
     startDate: null,
+    version: 1,
+    auditLog: [{ id: uuidv4(), at: now, action: 'created', details: 'Project created' }],
+    revisions: [{ version: 1, savedAt: now, summary: 'Initial version' }],
+    advancedFeatures: defaultAdvancedFeatures(),
   }
 }

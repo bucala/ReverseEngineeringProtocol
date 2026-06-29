@@ -44,6 +44,11 @@ export const useAppStore = create<AppState>()(
     {
       name: 'reveng_app_settings',
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        language: state.language,
+        themeMode: state.themeMode,
+        sidebarOpen: state.sidebarOpen,
+      }),
       onRehydrateStorage: () => (state) => {
         if (state?.language) {
           i18n.changeLanguage(state.language)

@@ -8,10 +8,10 @@ type Translations = Record<string, string>
 
 const SK: Translations = {
   protocolTitle: 'PROTOKOL O ROZSAHU PRÁC',
-  protocolSubtitle: 'Protocol of Work Scope',
+  protocolSubtitle: 'Protokol rozsahu prác',
   section1: '1. Predmet zákazky',
   section2: '2. Hodnotenie skenovania',
-  section3: '3. RE & CAD postprocessing',
+  section3: '3. RE & CAD spracovanie',
   section4: '4. Kalkulácia času a nákladov',
   section5: '5. Špecifikácia odovzdávky',
   section6: '6. Natívne CAD prostredie',
@@ -25,10 +25,10 @@ const SK: Translations = {
   ganttTotalDuration: 'Celková dĺžka projektu',
   preparation: 'Príprava',
   scanning: 'Skenovanie',
-  meshProcessingLabel: 'Mesh processing',
+  meshProcessingLabel: 'Úprava siete',
   cadLabel: 'CAD spracovanie',
   inspection: 'Inšpekcia',
-  reporting: 'Reporting',
+  reporting: 'Reportovanie',
   management: 'Projektový manažment',
   travel: 'Cestovné',
   protocolNumber: 'Číslo protokolu',
@@ -40,7 +40,7 @@ const SK: Translations = {
   partNumber: 'Číslo dielca',
   serialNumber: 'Sériové číslo',
   material: 'Materiál',
-  dimensions: 'Rozmery (Bounding Box)',
+  dimensions: 'Rozmery',
   rePurpose: 'Účel reverzného inžinierstva',
   notes: 'Poznámky',
   scanningMethod: 'Metóda skenovania',
@@ -75,7 +75,7 @@ const SK: Translations = {
   cadSystem: 'CAD systém',
   cadVersion: 'Verzia softvéru',
   drawingStandard: 'Kótovací štandard',
-  featureTree: 'Feature Tree',
+  featureTree: 'Strom prvkov',
   parametricRelations: 'Parametrické väzby',
   assemblyConstraints: 'Väzby zostáv',
   sheetMetal: 'Plechové diely',
@@ -89,6 +89,61 @@ const SK: Translations = {
   no: 'Nie',
   ico: 'IČO',
   dic: 'DIČ',
+
+  draft: 'Návrh',
+  in_review: 'V kontrole',
+  approved: 'Schválené',
+  completed: 'Dokončené',
+  archived: 'Archivované',
+  spare_part: 'Náhradný diel',
+  design_innovation: 'Dizajnová inovácia',
+  archiving: 'Archivácia',
+  documentation: 'Dokumentácia',
+  other: 'Iné',
+  structured_light: 'Štruktúrované svetlo',
+  laser_line: 'Laserová linka',
+  ct_scan: 'CT sken',
+  photogrammetry: 'Fotogrametria',
+  cmm: 'CMM meranie',
+  handheld: 'Ručný skener',
+  standard: 'Štandardná',
+  high_precision: 'Vysoká presnosť',
+  metrology: 'Metrologická',
+  easy: 'Ľahká',
+  medium: 'Stredná',
+  hard: 'Ťažká',
+  extreme: 'Extrémna',
+  matte: 'Matný',
+  glossy: 'Lesklý',
+  reflective: 'Reflexný',
+  transparent: 'Transparentný',
+  mixed: 'Kombinovaný',
+  simple: 'Jednoduchá',
+  moderate: 'Stredná',
+  complex: 'Komplexná',
+  freeform: 'Freeform',
+  coded: 'Kódované',
+  uncoded: 'Nekódované',
+  both: 'Kódované aj nekódované',
+  as_built: 'As-built',
+  design_intent: 'Design intent',
+  auto_surfacing: 'Automatické plochovanie',
+  parametric_solid: 'Parametrický solid',
+  hybrid: 'Hybridná metóda',
+  errorCleaning: 'Čistenie chýb',
+  smoothing: 'Vyhladzovanie',
+  coordinateAlignment: 'Zarovnanie súradníc',
+  dataOptimization: 'Optimalizácia dát',
+  watertight: 'Uzavretá sieť',
+  decimation: 'Decimácia',
+  inspectionActivity: 'Inšpekcia',
+  managementActivity: 'Manažment',
+  surfacePrep: 'Príprava povrchu',
+  required: 'Vyžadované',
+  ctScanLabel: 'CT sken',
+  destructiveMethod: 'Deštruktívna metóda',
+  deepCavities: 'Hlboké dutiny',
+  thinWalls: 'Tenké steny',
 }
 
 const EN: Translations = {
@@ -168,6 +223,61 @@ const EN: Translations = {
   reporting: 'Reporting',
   management: 'Project Management',
   travel: 'Travel',
+
+  draft: 'Draft',
+  in_review: 'In review',
+  approved: 'Approved',
+  completed: 'Completed',
+  archived: 'Archived',
+  spare_part: 'Spare part',
+  design_innovation: 'Design innovation',
+  archiving: 'Archiving',
+  documentation: 'Documentation',
+  other: 'Other',
+  structured_light: 'Structured light',
+  laser_line: 'Laser line',
+  ct_scan: 'CT scan',
+  photogrammetry: 'Photogrammetry',
+  cmm: 'CMM',
+  handheld: 'Handheld scanner',
+  standard: 'Standard',
+  high_precision: 'High precision',
+  metrology: 'Metrology',
+  easy: 'Easy',
+  medium: 'Medium',
+  hard: 'Hard',
+  extreme: 'Extreme',
+  matte: 'Matte',
+  glossy: 'Glossy',
+  reflective: 'Reflective',
+  transparent: 'Transparent',
+  mixed: 'Mixed',
+  simple: 'Simple',
+  moderate: 'Moderate',
+  complex: 'Complex',
+  freeform: 'Freeform',
+  coded: 'Coded',
+  uncoded: 'Uncoded',
+  both: 'Coded and uncoded',
+  as_built: 'As-built',
+  design_intent: 'Design intent',
+  auto_surfacing: 'Auto surfacing',
+  parametric_solid: 'Parametric solid',
+  hybrid: 'Hybrid',
+  errorCleaning: 'Error cleaning',
+  smoothing: 'Smoothing',
+  coordinateAlignment: 'Coordinate alignment',
+  dataOptimization: 'Data optimization',
+  watertight: 'Watertight mesh',
+  decimation: 'Decimation',
+  inspectionActivity: 'Inspection',
+  managementActivity: 'Management',
+  surfacePrep: 'Surface preparation',
+  required: 'Required',
+  ctScanLabel: 'CT scan',
+  destructiveMethod: 'Destructive method',
+  deepCavities: 'Deep cavities',
+  thinWalls: 'Thin walls',
 }
 
 const DE: Translations = {
@@ -247,6 +357,61 @@ const DE: Translations = {
   reporting: 'Berichterstattung',
   management: 'Projektmanagement',
   travel: 'Reisen',
+
+  draft: 'Entwurf',
+  in_review: 'In Prüfung',
+  approved: 'Freigegeben',
+  completed: 'Abgeschlossen',
+  archived: 'Archiviert',
+  spare_part: 'Ersatzteil',
+  design_innovation: 'Designinnovation',
+  archiving: 'Archivierung',
+  documentation: 'Dokumentation',
+  other: 'Andere',
+  structured_light: 'Streifenlicht',
+  laser_line: 'Laserlinie',
+  ct_scan: 'CT-Scan',
+  photogrammetry: 'Photogrammetrie',
+  cmm: 'KMG',
+  handheld: 'Handscanner',
+  standard: 'Standard',
+  high_precision: 'Hohe Präzision',
+  metrology: 'Metrologie',
+  easy: 'Einfach',
+  medium: 'Mittel',
+  hard: 'Schwer',
+  extreme: 'Extrem',
+  matte: 'Matt',
+  glossy: 'Glänzend',
+  reflective: 'Reflektierend',
+  transparent: 'Transparent',
+  mixed: 'Gemischt',
+  simple: 'Einfach',
+  moderate: 'Mittel',
+  complex: 'Komplex',
+  freeform: 'Freiform',
+  coded: 'Kodiert',
+  uncoded: 'Unkodiert',
+  both: 'Kodiert und unkodiert',
+  as_built: 'As-built',
+  design_intent: 'Design intent',
+  auto_surfacing: 'Automatische Flächenrückführung',
+  parametric_solid: 'Parametrischer Volumenkörper',
+  hybrid: 'Hybrid',
+  errorCleaning: 'Fehlerbereinigung',
+  smoothing: 'Glättung',
+  coordinateAlignment: 'Koordinatenausrichtung',
+  dataOptimization: 'Datenoptimierung',
+  watertight: 'Geschlossenes Netz',
+  decimation: 'Dezimierung',
+  inspectionActivity: 'Inspektion',
+  managementActivity: 'Management',
+  surfacePrep: 'Oberflächenvorbereitung',
+  required: 'Erforderlich',
+  ctScanLabel: 'CT-Scan',
+  destructiveMethod: 'Destruktive Methode',
+  deepCavities: 'Tiefe Kavitäten',
+  thinWalls: 'Dünne Wände',
 }
 
 function getTranslations(language: string): Translations {
@@ -272,7 +437,8 @@ const CSS = `
   .protocol-title { flex: 1.5; text-align: center; }
   .protocol-title h1 { font-size: 14pt; font-weight: bold; color: #1565C0; text-transform: uppercase; letter-spacing: 1px; }
   .protocol-title h2 { font-size: 10pt; color: #546E7A; margin-top: 4px; }
-  .protocol-meta { margin-top: 8px; font-size: 9pt; color: #37474F; border: 1px solid #90CAF9; border-radius: 4px; padding: 6px 10px; background: #E3F2FD; }
+  .protocol-meta { margin-top: 8px; font-size: 8.5pt; color: #37474F; border: 1px solid #90CAF9; border-radius: 4px; padding: 6px 10px; background: #E3F2FD; display: inline-block; white-space: nowrap; }
+  .date-nowrap { white-space: nowrap; }
 
   /* Sections */
   .section { margin-bottom: 16px; }
@@ -320,21 +486,33 @@ const CSS = `
 
 // ─── Helper renderers ─────────────────────────────────────────────────────────
 
-function InfoRow({ label, value }: { label: string; value: string | number | null | undefined }) {
+function translateValue(t: (key: string) => string, value: string | number | null | undefined): string {
+  if (value === null || value === undefined) return ''
+  if (typeof value === 'number') return String(value)
+  return t(value)
+}
+
+function formatDate(date: Date): string {
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${day}.${month}.${date.getFullYear()}`
+}
+
+function InfoRow({ label, value, t }: { label: string; value: string | number | null | undefined; t?: (key: string) => string }) {
   if (value === null || value === undefined || value === '') return null
   return (
     <tr>
       <td className="label-col">{label}</td>
-      <td>{String(value)}</td>
+      <td>{t ? translateValue(t, value) : String(value)}</td>
     </tr>
   )
 }
 
-function ChipCell({ items }: { items: string[] }) {
+function ChipCell({ items, t }: { items: string[]; t?: (key: string) => string }) {
   if (!items || items.length === 0) return <span>—</span>
   return (
     <div className="chip-list">
-      {items.map((item) => <span key={item} className="chip">{item}</span>)}
+      {items.map((item) => <span key={item} className="chip">{t ? t(item) : item}</span>)}
     </div>
   )
 }
@@ -377,9 +555,9 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
     { key: 'scanningEntry' as const, label: t('scanning'), ah: autoHours.scanning },
     { key: 'meshProcessingEntry' as const, label: t('meshProcessing'), ah: autoHours.mesh },
     { key: 'cadEntry' as const, label: t('estimatedCadHours'), ah: autoHours.cad },
-    { key: 'inspectionEntry' as const, label: 'Inspection', ah: autoHours.inspection },
+    { key: 'inspectionEntry' as const, label: t('inspectionActivity'), ah: autoHours.inspection },
     { key: 'reportingEntry' as const, label: t('reporting'), ah: autoHours.reporting },
-    { key: 'managementEntry' as const, label: 'Management', ah: autoHours.management },
+    { key: 'managementEntry' as const, label: t('managementActivity'), ah: autoHours.management },
     { key: 'travelEntry' as const, label: t('travel'), ah: autoHours.travel },
   ]
 
@@ -399,7 +577,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
     .filter(([, v]) => v)
     .map(([k]) => k)
 
-  const formattedDate = new Date().toLocaleDateString('sk-SK')
+  const formattedDate = formatDate(new Date())
 
   return (
     <div className="protocol-print">
@@ -431,8 +609,8 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
           <h2>{t('protocolSubtitle')}</h2>
           <div className="protocol-meta">
             {t('protocolNumber')}: <strong>{project.protocolNumber}</strong>
-            {' | '}{t('date')}: <strong>{formattedDate}</strong>
-            {' | '}{t('status')}: <strong>{project.status}</strong>
+            {' | '}<span className="date-nowrap">{t('date')}: <strong>{formattedDate}</strong></span>
+            {' | '}{t('status')}: <strong>{t(project.status)}</strong>
           </div>
         </div>
 
@@ -473,7 +651,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
                     value={`${spec.boundingBox.x ?? '?'} × ${spec.boundingBox.y ?? '?'} × ${spec.boundingBox.z ?? '?'} ${spec.boundingBox.unit}`} />
                 )}
                 {spec.rePurpose && spec.rePurpose.length > 0 && (
-                  <tr><td className="label-col">{t('rePurpose')}</td><td><ChipCell items={spec.rePurpose} /></td></tr>
+                  <tr><td className="label-col">{t('rePurpose')}</td><td><ChipCell items={spec.rePurpose}  t={t} /></td></tr>
                 )}
                 <InfoRow label={t('notes')} value={spec.notes} />
               </tbody>
@@ -497,23 +675,23 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
         <div className="section-title">{t('section2')}</div>
         <table>
           <tbody>
-            <InfoRow label={t('scanningMethod')} value={meshAssessment.scanningMethod} />
-            <InfoRow label={t('precisionLevel')} value={meshAssessment.precisionLevel} />
+            <InfoRow label={t('scanningMethod')} value={meshAssessment.scanningMethod}  t={t} />
+            <InfoRow label={t('precisionLevel')} value={meshAssessment.precisionLevel}  t={t} />
             {meshAssessment.toleranceMm !== null && (
               <InfoRow label={t('toleranceMm')} value={`${meshAssessment.toleranceMm} mm`} />
             )}
-            <InfoRow label={t('scanningDifficulty')} value={meshAssessment.scanningDifficulty} />
-            <InfoRow label={t('surfaceFinish')} value={meshAssessment.surfaceFinish} />
-            <InfoRow label={t('geometryComplexity')} value={meshAssessment.geometryComplexity} />
-            <InfoRow label={t('referenceTargets')} value={meshAssessment.referenceTargets} />
+            <InfoRow label={t('scanningDifficulty')} value={meshAssessment.scanningDifficulty}  t={t} />
+            <InfoRow label={t('surfaceFinish')} value={meshAssessment.surfaceFinish}  t={t} />
+            <InfoRow label={t('geometryComplexity')} value={meshAssessment.geometryComplexity}  t={t} />
+            <InfoRow label={t('referenceTargets')} value={meshAssessment.referenceTargets}  t={t} />
             <InfoRow label={t('estimatedScanningHours')} value={`${meshAssessment.estimatedScanningHours ?? 0} h`} />
             {meshAssessment.surfacePrepRequired && (
-              <InfoRow label="Surface Prep" value={meshAssessment.surfacePrepMethod || 'Required'} />
+              <InfoRow label={t('surfacePrep')} value={meshAssessment.surfacePrepMethod || t('required')} />
             )}
-            {meshAssessment.requiresCtScan && <InfoRow label="CT Scan" value="Required" />}
-            {meshAssessment.requiresDestructive && <InfoRow label="Destructive Method" value="Required" />}
-            {meshAssessment.hasDeepCavities && <InfoRow label="Deep Cavities" value="Yes" />}
-            {meshAssessment.hasThinWalls && <InfoRow label="Thin Walls" value="Yes" />}
+            {meshAssessment.requiresCtScan && <InfoRow label={t('ctScanLabel')} value={t('required')} />}
+            {meshAssessment.requiresDestructive && <InfoRow label={t('destructiveMethod')} value={t('required')} />}
+            {meshAssessment.hasDeepCavities && <InfoRow label={t('deepCavities')} value={t('yes')} />}
+            {meshAssessment.hasThinWalls && <InfoRow label={t('thinWalls')} value={t('yes')} />}
             <InfoRow label={t('notes')} value={meshAssessment.notes} />
           </tbody>
         </table>
@@ -524,8 +702,8 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
         <div className="section-title">{t('section3')}</div>
         <table>
           <tbody>
-            <InfoRow label={t('strategy')} value={reCadPostprocessing.strategy} />
-            <InfoRow label={t('surfacingMethod')} value={reCadPostprocessing.surfacingMethod} />
+            <InfoRow label={t('strategy')} value={reCadPostprocessing.strategy}  t={t} />
+            <InfoRow label={t('surfacingMethod')} value={reCadPostprocessing.surfacingMethod}  t={t} />
             <InfoRow label={t('estimatedCadHours')} value={`${reCadPostprocessing.estimatedCadHours ?? 0} h`} />
             {reCadPostprocessing.selectedCadFormats.length > 0 && (
               <tr>
@@ -536,7 +714,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
             {activeMeshTasks.length > 0 && (
               <tr>
                 <td className="label-col">{t('meshProcessing')}</td>
-                <td><ChipCell items={activeMeshTasks} /></td>
+                <td><ChipCell items={activeMeshTasks}  t={t} /></td>
               </tr>
             )}
             <InfoRow label={t('notes')} value={reCadPostprocessing.notes} />
@@ -763,7 +941,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
             {project.realizatorSignature && (
               <img src={project.realizatorSignature} style={{ maxWidth: 200, maxHeight: 80, display: 'block', marginTop: 8 }} alt="signature" />
             )}
-            <div className="sig-line">{t('date')}: {project.signedAt ? new Date(project.signedAt).toLocaleDateString('sk-SK') : '_______________________'}</div>
+            <div className="sig-line">{t('date')}: {project.signedAt ? formatDate(new Date(project.signedAt)) : '_______________________'}</div>
             <div className="sig-line" style={{ marginTop: 8 }}>{t('stamp')}:</div>
           </div>
           <div className="sig-block">
@@ -772,7 +950,7 @@ function ProtocolPrint({ project, t, qrDataUrl }: ProtocolPrintProps) {
             {project.ziadatelSignature && (
               <img src={project.ziadatelSignature} style={{ maxWidth: 200, maxHeight: 80, display: 'block', marginTop: 8 }} alt="signature" />
             )}
-            <div className="sig-line">{t('date')}: {project.signedAt ? new Date(project.signedAt).toLocaleDateString('sk-SK') : '_______________________'}</div>
+            <div className="sig-line">{t('date')}: {project.signedAt ? formatDate(new Date(project.signedAt)) : '_______________________'}</div>
             <div className="sig-line" style={{ marginTop: 8 }}>{t('stamp')}:</div>
           </div>
         </div>

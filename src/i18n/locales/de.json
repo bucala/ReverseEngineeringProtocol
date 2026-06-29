@@ -65,7 +65,8 @@
     "importProject": "Projekt importieren (.reproj)",
     "deleteProject": "Projekt löschen",
     "deleteConfirm": "Möchten Sie dieses Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "noProjects": "Noch keine Projekte. Erstellen Sie ein neues Projekt."
+    "noProjects": "Noch keine Projekte. Erstellen Sie ein neues Projekt.",
+    "importOverwriteConfirm": "Projekt existiert bereits. Möchten Sie es überschreiben? Abbrechen = als Kopie importieren."
   },
   "company": {
     "title": "Unternehmensprofil",
@@ -114,7 +115,9 @@
     "model3D": "3D-Modell",
     "uploadModel": "3D-Modell hochladen (STL / OBJ)",
     "removeModel": "3D-Modell entfernen",
-    "modelTooBig": "Datei ist zu groß (max 15 MB)"
+    "modelTooBig": "Datei ist zu groß (max 15 MB)",
+    "imageTooBig": "Bild ist zu groß (max. 8 MB).",
+    "imageLimitReached": "Bildlimit für dieses Objekt erreicht."
   },
   "rePurpose": {
     "title": "Zweck des Reverse Engineerings",
@@ -375,10 +378,77 @@
     "totalDuration": "Gesamtprojektdauer"
   },
   "validation": {
-    "required": "Dieses Feld ist erforderlich",
-    "invalidEmail": "Ungültige E-Mail-Adresse",
-    "invalidPhone": "Ungültige Telefonnummer",
-    "positiveNumber": "Muss eine positive Zahl sein",
-    "maxLength": "Maximale Länge beträgt {{max}} Zeichen"
+    "projectTitleMissing": "Projekttitel fehlt",
+    "contractorMissing": "Auftragnehmerprofil fehlt",
+    "clientMissing": "Kundenprofil fehlt",
+    "objectNameMissing": "Jedes Objekt benötigt einen Namen",
+    "deadlineMissing": "Liefertermin fehlt",
+    "nativeCadSystemMissing": "Natives CAD-System fehlt"
+  },
+  "advanced": {
+    "title": "Erweiterte Funktionen",
+    "roadmapTitle": "Erweiterte Roadmap-Funktionen",
+    "roadmapSubtitle": "Workflow, Angebote, Risikobewertung, Lieferung, Integrationen, KI und Compliance",
+    "lifecycleApprovals": "1. Lebenszyklus & Freigaben",
+    "workflowStage": "Workflow-Phase",
+    "approvalRecords": "Freigabeprotokolle",
+    "checklistCompletion": "Checklistenfortschritt",
+    "quotesRateCards": "2. Angebote & Stundensätze",
+    "rateCardEntries": "Satzkarten-Einträge",
+    "estimatedHours": "Geschätzte Stunden",
+    "scanRiskRecommendation": "3. Scanrisiko & Methodenempfehlung",
+    "recommendedMethod": "Empfohlene Methode",
+    "cadReDelivery": "4. CAD, RE-Software & Liefermanifest",
+    "reSoftwareSelected": "Ausgewählte RE-Software",
+    "manifestItems": "Manifestpositionen",
+    "cadCompatibilityNotes": "CAD-Kompatibilitätshinweise",
+    "reSoftwareSupport": "Unterstützt Geomagic Design X, QUICKSURFACE, PolyWorks, Rhino und Rhino + Meshsurface im RE/CAD-Schritt.",
+    "capacityKpiReporting": "5. Kapazität, KPI & Reporting",
+    "resources": "Ressourcen",
+    "revenue": "Umsatz",
+    "margin": "Marge",
+    "overdueRisk": "Verspätungsrisiko",
+    "cloudIntegrations": "6. Cloud, CRM/Buchhaltung & CAD/PDM-Integrationen",
+    "cloudTargetPath": "Cloud-Zielpfad",
+    "accounting": "Buchhaltung",
+    "aiAssistedWork": "7. KI-gestützte Protokollarbeit",
+    "generateTechnicalSummary": "Technische Zusammenfassung generieren",
+    "checkProjectConsistency": "Projektkonsistenz prüfen",
+    "translateNotes": "Notizen übersetzen",
+    "securityCompliance": "8. Sicherheit, Compliance, Mobil & Desktop",
+    "confidentiality": "Vertraulichkeit",
+    "lockAfterSignature": "Nach Signatur sperren",
+    "mobilePhotoMode": "Mobiler Fotomodus",
+    "desktopSecureStorage": "Sicherer Desktop-Speicher",
+    "centralizedSummary": "Dieses Modul bündelt alle 12 vorgeschlagenen Roadmap-Bereiche als strukturierte Projektdaten: Lebenszyklus, Angebote, Scan Intelligence, CAD/Lieferung, Medien, Planung, Reporting, Integrationen, KI, Compliance, Revisionen und mobile/Desktop-Workflows.",
+    "workflowStages": {
+      "draft": "Entwurf",
+      "ready_for_review": "Bereit zur Prüfung",
+      "internal_review": "Interne Prüfung",
+      "client_approval": "Kundenfreigabe",
+      "approved": "Freigegeben",
+      "in_production": "In Produktion",
+      "delivered": "Geliefert",
+      "closed": "Geschlossen"
+    },
+    "riskLevels": {
+      "low": "niedrig",
+      "medium": "mittel",
+      "high": "hoch",
+      "critical": "kritisch"
+    },
+    "riskWarnings": {
+      "difficultSurface": "Schwierige optische Oberfläche",
+      "complexGeometry": "Komplexe/Freeform-Geometrie",
+      "hiddenGeometry": "Verdeckte/interne Geometrie",
+      "thinWalls": "Dünne Wände",
+      "tightTolerance": "Enge Toleranz"
+    },
+    "confidentialityLevels": {
+      "public": "öffentlich",
+      "internal": "intern",
+      "confidential": "vertraulich",
+      "nda": "NDA"
+    }
   }
 }
