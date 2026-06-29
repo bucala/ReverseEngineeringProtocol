@@ -384,5 +384,8 @@
     "objectNameMissing": "Every object needs a name",
     "deadlineMissing": "Delivery deadline is missing",
     "nativeCadSystemMissing": "Native CAD system is missing"
+  },
+  "advanced": {
+    "title": "Advanced features"
   }
 }

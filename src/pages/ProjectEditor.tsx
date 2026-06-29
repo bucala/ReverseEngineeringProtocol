@@ -28,13 +28,14 @@ import TimeEstimationModule from '@/components/modules/TimeEstimationModule'
 import DeliverablesModule from '@/components/modules/DeliverablesModule'
 import NativeCadModule from '@/components/modules/NativeCadModule'
 import GanttModule from '@/components/modules/GanttModule'
+import AdvancedFeaturesModule from '@/components/modules/AdvancedFeaturesModule'
 import ExportDialog from '@/components/project/ExportDialog'
 import TemplateDialog from '@/components/project/TemplateDialog'
 import SignatureDialog from '@/components/project/SignatureDialog'
 import { printProtocol } from '@/components/project/ProtocolPrint'
 import type { Project } from '@/types'
 
-const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables', 'nativecad', 'gantt'] as const
+const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables', 'nativecad', 'gantt', 'advanced'] as const
 type StepId = (typeof STEPS)[number]
 
 function getValidationIssues(project: Project, t: (key: string) => string): string[] {
@@ -57,6 +58,7 @@ const STEP_LABELS: Record<StepId, string> = {
   deliverables: 'deliverables.title',
   nativecad: 'nativeCad.title',
   gantt: 'gantt.title',
+  advanced: 'advanced.title',
 }
 
 export default function ProjectEditor() {
@@ -136,6 +138,7 @@ export default function ProjectEditor() {
       onFormats2DChange={(v) => handleUpdate({ deliverables: { ...project.deliverables, formats2D: v } })}
     />,
     <GanttModule key="gantt" project={project} onChange={handleUpdate} />,
+    <AdvancedFeaturesModule key="advanced" project={project} onChange={(v) => handleUpdate({ advancedFeatures: v }, 'Advanced roadmap features updated')} />,
   ]
 
   return (

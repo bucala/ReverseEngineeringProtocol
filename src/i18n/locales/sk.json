@@ -384,5 +384,8 @@
     "objectNameMissing": "Každý objekt musí mať názov",
     "deadlineMissing": "Chýba termín odovzdania",
     "nativeCadSystemMissing": "Chýba natívny CAD systém"
+  },
+  "advanced": {
+    "title": "Pokročilé funkcie"
   }
 }

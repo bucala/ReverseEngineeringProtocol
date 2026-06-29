@@ -102,6 +102,8 @@ export type CadOutputFormat =
   | 'IGES'
   | 'PARASOLID'
 
+export type ReverseEngineeringSoftware = 'GEOMAGIC_DESIGN_X' | 'QUICKSURFACE' | 'POLYWORKS' | 'RHINO' | 'RHINO_MESHSURFACE' | 'OTHER'
+
 export interface MeshProcessingTasks {
   errorCleaning: boolean
   smoothing: boolean
@@ -120,6 +122,9 @@ export interface RECadPostprocessing {
   toleranceAnalysis: boolean
   selectedCadFormats: CadOutputFormat[]
   meshProcessingTasks: MeshProcessingTasks
+  reverseEngineeringSoftware: ReverseEngineeringSoftware[]
+  reverseEngineeringSoftwareOther: string
+  scanToCadPreparationNotes: string
   estimatedCadHours: number | null
   notes: string
 }
@@ -205,6 +210,152 @@ export interface ProjectRevision {
   summary: string
 }
 
+
+export type WorkflowStage =
+  | 'draft'
+  | 'ready_for_review'
+  | 'internal_review'
+  | 'client_approval'
+  | 'approved'
+  | 'in_production'
+  | 'delivered'
+  | 'closed'
+
+export interface ProjectApproval {
+  id: string
+  role: 'internal_reviewer' | 'client' | 'quality'
+  name: string
+  email: string
+  status: 'pending' | 'approved' | 'rejected'
+  decidedAt: string | null
+  comment: string
+}
+
+export interface QualityChecklistItem {
+  id: string
+  area: 'project' | 'object' | 'mesh' | 'recad' | 'time' | 'deliverables' | 'nativecad'
+  label: string
+  completed: boolean
+  required: boolean
+}
+
+export interface QuoteVariant {
+  id: string
+  name: 'basic' | 'standard' | 'premium' | string
+  description: string
+  includedDeliverables: string[]
+  totalPrice: number
+  currency: TimeEstimation['currency']
+}
+
+export interface RateCardItem {
+  id: string
+  label: string
+  hourlyRate: number
+  currency: TimeEstimation['currency']
+}
+
+export interface ScanRiskAssessment {
+  score: number
+  level: 'low' | 'medium' | 'high' | 'critical'
+  warnings: string[]
+  recommendations: string[]
+  recommendedMethod: ScanningMethod
+}
+
+export interface MaterialKnowledge {
+  material: string
+  scanability: 'easy' | 'medium' | 'hard'
+  surfacePreparation: string
+  typicalToleranceMm: number | null
+  notes: string
+}
+
+export interface DeliveryManifestItem {
+  id: string
+  filename: string
+  type: 'mesh' | 'cad' | 'drawing' | 'inspection' | 'report' | 'other'
+  format: string
+  status: 'planned' | 'generated' | 'delivered'
+  checksum: string | null
+  notes: string
+}
+
+export interface CadCompatibilityNote {
+  id: string
+  cadSystem: CadSystem
+  recommendedFormats: CadOutputFormat[]
+  risk: 'low' | 'medium' | 'high'
+  note: string
+}
+
+export interface CapacityResource {
+  id: string
+  name: string
+  role: string
+  weeklyHours: number
+  unavailableDates: string[]
+}
+
+export interface ProjectKpiSnapshot {
+  estimatedRevenue: number
+  estimatedHours: number
+  marginPercent: number
+  overdueRisk: 'low' | 'medium' | 'high'
+}
+
+export interface CloudDeliveryTarget {
+  provider: 'onedrive' | 'google_drive' | 'dropbox' | 's3' | 'nas' | 'other'
+  targetPath: string
+  shareUrl: string
+  expiresAt: string | null
+}
+
+export interface BusinessIntegrationSettings {
+  crmSystem: string
+  accountingSystem: string
+  exportFormat: 'csv' | 'json' | 'xlsx'
+}
+
+export interface AiAssistanceSettings {
+  generateTechnicalSummary: boolean
+  checkConsistency: boolean
+  translateNotes: boolean
+  lastSummary: string
+}
+
+export interface ComplianceSettings {
+  confidentiality: 'public' | 'internal' | 'confidential' | 'nda'
+  watermark: string
+  lockAfterSignature: boolean
+  invalidateSignaturesOnChange: boolean
+}
+
+export interface PlatformWorkflowSettings {
+  mobilePhotoMode: boolean
+  desktopSecureStorage: boolean
+  autoBackupPath: string
+}
+
+export interface AdvancedProjectFeatures {
+  workflowStage: WorkflowStage
+  approvals: ProjectApproval[]
+  checklist: QualityChecklistItem[]
+  quoteVariants: QuoteVariant[]
+  rateCard: RateCardItem[]
+  scanRisk: ScanRiskAssessment
+  materialKnowledge: MaterialKnowledge[]
+  deliveryManifest: DeliveryManifestItem[]
+  cadCompatibility: CadCompatibilityNote[]
+  capacityResources: CapacityResource[]
+  kpiSnapshot: ProjectKpiSnapshot
+  cloudDelivery: CloudDeliveryTarget
+  businessIntegrations: BusinessIntegrationSettings
+  aiAssistance: AiAssistanceSettings
+  compliance: ComplianceSettings
+  platformWorkflow: PlatformWorkflowSettings
+}
+
 export interface Project {
   id: string
   protocolNumber: string
@@ -229,6 +380,7 @@ export interface Project {
   version: number
   auditLog: AuditEntry[]
   revisions: ProjectRevision[]
+  advancedFeatures: AdvancedProjectFeatures
 }
 
 // ─── Project Templates ────────────────────────────────────────────────────────

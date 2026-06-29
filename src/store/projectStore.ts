@@ -2,7 +2,11 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 import type { Project } from '@/types'
-import { createDefaultProject, defaultObjectSpec } from './defaults'
+import { createDefaultProject, defaultAdvancedFeatures, defaultObjectSpec } from './defaults'
+
+interface ImportOptions {
+  asCopy?: boolean
+}
 
 interface ImportOptions {
   asCopy?: boolean
@@ -44,6 +48,7 @@ function normalizeProject(project: Project): Project {
     version,
     auditLog: project.auditLog ?? [{ id: uuidv4(), at: project.createdAt ?? now, action: 'imported', details: 'Legacy project normalized' }],
     revisions: project.revisions ?? [{ version, savedAt: project.updatedAt ?? now, summary: 'Imported legacy version' }],
+    advancedFeatures: project.advancedFeatures ?? defaultAdvancedFeatures(),
   }
 }
 
