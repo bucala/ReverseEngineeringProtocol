@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --max-warnings 0",
     "tauri": "tauri",
     "cap:sync": "cap sync",
-    "cap:android": "cap run android"
+    "cap:android": "cap run android",
+    "test": "npm run build -- --mode test"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",

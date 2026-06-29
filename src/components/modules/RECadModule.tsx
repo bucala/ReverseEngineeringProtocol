@@ -16,7 +16,7 @@ import {
 import ArchitectureIcon from '@mui/icons-material/Architecture'
 import MeshIcon from '@mui/icons-material/ViewInAr'
 import { useTranslation } from 'react-i18next'
-import type { RECadPostprocessing, REStrategy, SurfacingMethod, CadOutputFormat, MeshProcessingTasks } from '@/types'
+import type { RECadPostprocessing, REStrategy, SurfacingMethod, CadOutputFormat, MeshProcessingTasks, ReverseEngineeringSoftware } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
 
 interface Props {
@@ -52,6 +52,15 @@ const CAD_LABELS: Record<CadOutputFormat, string> = {
   PARASOLID: 'Parasolid (.x_t)',
 }
 
+const RE_SOFTWARE: { value: ReverseEngineeringSoftware; label: string }[] = [
+  { value: 'GEOMAGIC_DESIGN_X', label: 'Geomagic Design X' },
+  { value: 'QUICKSURFACE', label: 'QUICKSURFACE' },
+  { value: 'POLYWORKS', label: 'PolyWorks' },
+  { value: 'RHINO', label: 'Rhino' },
+  { value: 'RHINO_MESHSURFACE', label: 'Rhino + Meshsurface' },
+  { value: 'OTHER', label: 'Other' },
+]
+
 const MESH_TASK_KEYS: (keyof MeshProcessingTasks)[] = [
   'errorCleaning',
   'smoothing',
@@ -76,6 +85,14 @@ export default function RECadModule({ value, onChange }: Props) {
 
   const setMeshTask = (key: keyof MeshProcessingTasks, val: boolean) =>
     set('meshProcessingTasks', { ...value.meshProcessingTasks, [key]: val })
+
+  const toggleReSoftware = (software: ReverseEngineeringSoftware) => {
+    const current = value.reverseEngineeringSoftware ?? []
+    const next = current.includes(software)
+      ? current.filter((item) => item !== software)
+      : [...current, software]
+    set('reverseEngineeringSoftware', next)
+  }
 
   return (
     <>
@@ -141,6 +158,54 @@ export default function RECadModule({ value, onChange }: Props) {
                 />
               ))}
             </FormGroup>
+          </Grid>
+
+
+          {/* Reverse Engineering software for scan-to-CAD preparation */}
+          <Grid item xs={12}>
+            <Typography variant="subtitle2" gutterBottom>
+              Reverse Engineering Software – STL/PLY mesh preparation for CAD
+            </Typography>
+            <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
+              Select tools used for the first cleanup, alignment, surfacing preparation and conversion of scan data into CAD-usable form.
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {RE_SOFTWARE.map((software) => {
+                const selected = (value.reverseEngineeringSoftware ?? []).includes(software.value)
+                return (
+                  <Chip
+                    key={software.value}
+                    label={software.label}
+                    onClick={() => toggleReSoftware(software.value)}
+                    color={selected ? 'secondary' : 'default'}
+                    variant={selected ? 'filled' : 'outlined'}
+                    clickable
+                  />
+                )
+              })}
+            </Box>
+          </Grid>
+
+          {(value.reverseEngineeringSoftware ?? []).includes('OTHER') && (
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Other RE software"
+                value={value.reverseEngineeringSoftwareOther ?? ''}
+                onChange={(e) => set('reverseEngineeringSoftwareOther', e.target.value)}
+                fullWidth
+              />
+            </Grid>
+          )}
+
+          <Grid item xs={12}>
+            <TextField
+              label="Scan-to-CAD preparation notes (STL/PLY cleanup, alignment, mesh repairs, surfacing prep)"
+              value={value.scanToCadPreparationNotes ?? ''}
+              onChange={(e) => set('scanToCadPreparationNotes', e.target.value)}
+              multiline
+              rows={2}
+              fullWidth
+            />
           </Grid>
 
           {/* CAD format checkboxes */}

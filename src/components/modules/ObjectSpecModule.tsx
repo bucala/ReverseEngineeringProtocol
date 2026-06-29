@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { lazy, Suspense, useCallback, useState } from 'react'
 import {
   Accordion,
   AccordionSummary,
@@ -30,12 +30,16 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import type { ObjectSpec, ObjectImage, REPurpose } from '@/types'
 import SectionCard from '@/components/common/SectionCard'
-import ModelViewer3D from '@/components/common/ModelViewer3D'
+
 import { readFileAsDataURL } from '@/utils/fileFormat'
 
 const UNITS = ['mm', 'cm', 'm', 'inch'] as const
 const RE_PURPOSES: REPurpose[] = ['spare_part', 'design_innovation', 'archiving', 'documentation', 'inspection', 'other']
 
+const ModelViewer3D = lazy(() => import('@/components/common/ModelViewer3D'))
+
+const MAX_IMAGE_SIZE = 8 * 1024 * 1024 // 8 MB
+const MAX_IMAGES_PER_OBJECT = 12
 const MAX_MODEL_SIZE = 15 * 1024 * 1024 // 15 MB
 
 const emptySpec = (): ObjectSpec => ({
@@ -55,11 +59,22 @@ const emptySpec = (): ObjectSpec => ({
 
 function ImageDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: ObjectSpec) => void }) {
   const { t } = useTranslation()
+  const [imageError, setImageError] = useState<string | null>(null)
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
+      setImageError(null)
+      const remainingSlots = MAX_IMAGES_PER_OBJECT - spec.images.length
+      if (remainingSlots <= 0) {
+        setImageError(t('object.imageLimitReached'))
+        return
+      }
       const newImages: ObjectImage[] = []
-      for (const file of acceptedFiles) {
+      for (const file of acceptedFiles.slice(0, remainingSlots)) {
+        if (file.size > MAX_IMAGE_SIZE) {
+          setImageError(t('object.imageTooBig'))
+          continue
+        }
         try {
           const dataBase64 = await readFileAsDataURL(file)
           newImages.push({ id: uuidv4(), dataBase64, mimeType: file.type, description: file.name, takenAt: null })
@@ -67,7 +82,7 @@ function ImageDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: Obj
       }
       onChange({ ...spec, images: [...spec.images, ...newImages] })
     },
-    [spec, onChange]
+    [spec, onChange, t]
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -101,6 +116,7 @@ function ImageDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: Obj
           {t('object.uploadImages')}
         </Typography>
       </Box>
+      {imageError && <Typography variant="caption" color="error" display="block" sx={{ mt: 0.5 }}>{imageError}</Typography>}
       {spec.images.length > 0 && (
         <Stack direction="row" flexWrap="wrap" gap={1.5} sx={{ mt: 1.5 }}>
           {spec.images.map((img) => (
@@ -192,7 +208,7 @@ function Model3DDropzone({ spec, onChange }: { spec: ObjectSpec; onChange: (v: O
       ) : (
         <Box>
           <Box sx={{ height: 280, borderRadius: 1, overflow: 'hidden', mb: 1 }}>
-            <ModelViewer3D dataBase64={spec.model3D.dataBase64} format={spec.model3D.format} />
+            <Suspense fallback={<Typography variant="caption">{t('common.loading')}</Typography>}><ModelViewer3D dataBase64={spec.model3D.dataBase64} format={spec.model3D.format} /></Suspense>
           </Box>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="caption" color="text.secondary">
