@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
+  Alert,
   Box,
   Stepper,
   Step,
@@ -35,6 +36,17 @@ import type { Project } from '@/types'
 
 const STEPS = ['project', 'object', 'mesh', 'recad', 'time', 'deliverables', 'nativecad', 'gantt'] as const
 type StepId = (typeof STEPS)[number]
+
+function getValidationIssues(project: Project, t: (key: string) => string): string[] {
+  const issues: string[] = []
+  if (!project.title.trim()) issues.push(t('validation.projectTitleMissing'))
+  if (!project.realizator) issues.push(t('validation.contractorMissing'))
+  if (!project.ziadatel) issues.push(t('validation.clientMissing'))
+  if (!project.objectSpecs.length || project.objectSpecs.some((o) => !o.name.trim())) issues.push(t('validation.objectNameMissing'))
+  if (!project.deliverables.deadline) issues.push(t('validation.deadlineMissing'))
+  if (project.nativeCadSpec.required && !project.nativeCadSpec.system) issues.push(t('validation.nativeCadSystemMissing'))
+  return issues
+}
 
 const STEP_LABELS: Record<StepId, string> = {
   project: 'nav.projects',
@@ -89,9 +101,9 @@ export default function ProjectEditor() {
 
   const project = getActiveProject()
 
-  const handleUpdate = (patch: Partial<Project>) => {
+  const handleUpdate = (patch: Partial<Project>, summary?: string) => {
     if (!project) return
-    updateProject(project.id, patch)
+    updateProject(project.id, patch, summary)
     setSaveIndicator(true)
     setTimeout(() => setSaveIndicator(false), 1500)
   }
@@ -103,6 +115,9 @@ export default function ProjectEditor() {
       </Box>
     )
   }
+
+  const validationIssues = getValidationIssues(project, t)
+  const canFinish = validationIssues.length === 0
 
   const stepContent = [
     <ProjectHeader key="header" project={project} profiles={profiles} onChange={handleUpdate} />,
@@ -191,6 +206,12 @@ export default function ProjectEditor() {
         ))}
       </Stepper>
 
+      {validationIssues.length > 0 && activeStep === STEPS.length - 1 && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          {validationIssues.join(' • ')}
+        </Alert>
+      )}
+
       {/* Step content */}
       <Box sx={{ mb: 4 }}>
         {stepContent[activeStep]}
@@ -208,12 +229,14 @@ export default function ProjectEditor() {
           variant="contained"
           onClick={() => {
             if (activeStep === STEPS.length - 1) {
-              handleUpdate({ status: 'completed' })
+              if (!canFinish) return
+              handleUpdate({ status: 'completed' }, 'Project completed')
               navigate('/dashboard')
             } else {
               setActiveStep((s) => s + 1)
             }
           }}
+          disabled={activeStep === STEPS.length - 1 && !canFinish}
         >
           {activeStep === STEPS.length - 1 ? t('common.finish') : t('common.next')}
         </Button>

@@ -65,7 +65,8 @@
     "importProject": "Importovať projekt (.reproj)",
     "deleteProject": "Vymazať projekt",
     "deleteConfirm": "Naozaj chcete vymazať tento projekt? Táto akcia je nenávratná.",
-    "noProjects": "Zatiaľ žiadne projekty. Vytvorte nový projekt."
+    "noProjects": "Zatiaľ žiadne projekty. Vytvorte nový projekt.",
+    "importOverwriteConfirm": "Projekt už existuje. Chcete ho prepísať? Zrušiť = importovať ako kópiu."
   },
   "company": {
     "title": "Profil spoločnosti",
@@ -114,7 +115,9 @@
     "model3D": "3D Model",
     "uploadModel": "Nahrať 3D model (STL / OBJ)",
     "removeModel": "Odstrániť 3D model",
-    "modelTooBig": "Súbor je príliš veľký (max 15 MB)"
+    "modelTooBig": "Súbor je príliš veľký (max 15 MB)",
+    "imageTooBig": "Obrázok je príliš veľký (max. 8 MB).",
+    "imageLimitReached": "Dosiahnutý limit obrázkov pre objekt."
   },
   "rePurpose": {
     "title": "Účel reverzného inžinierstva",
@@ -375,10 +378,11 @@
     "totalDuration": "Celkové trvanie projektu"
   },
   "validation": {
-    "required": "Toto pole je povinné",
-    "invalidEmail": "Neplatná e-mailová adresa",
-    "invalidPhone": "Neplatné telefónne číslo",
-    "positiveNumber": "Musí byť kladné číslo",
-    "maxLength": "Maximálna dĺžka je {{max}} znakov"
+    "projectTitleMissing": "Chýba názov projektu",
+    "contractorMissing": "Chýba profil realizátora",
+    "clientMissing": "Chýba profil žiadateľa",
+    "objectNameMissing": "Každý objekt musí mať názov",
+    "deadlineMissing": "Chýba termín odovzdania",
+    "nativeCadSystemMissing": "Chýba natívny CAD systém"
   }
 }

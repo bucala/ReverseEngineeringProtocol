@@ -65,7 +65,8 @@
     "importProject": "Projekt importieren (.reproj)",
     "deleteProject": "Projekt löschen",
     "deleteConfirm": "Möchten Sie dieses Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "noProjects": "Noch keine Projekte. Erstellen Sie ein neues Projekt."
+    "noProjects": "Noch keine Projekte. Erstellen Sie ein neues Projekt.",
+    "importOverwriteConfirm": "Projekt existiert bereits. Möchten Sie es überschreiben? Abbrechen = als Kopie importieren."
   },
   "company": {
     "title": "Unternehmensprofil",
@@ -114,7 +115,9 @@
     "model3D": "3D-Modell",
     "uploadModel": "3D-Modell hochladen (STL / OBJ)",
     "removeModel": "3D-Modell entfernen",
-    "modelTooBig": "Datei ist zu groß (max 15 MB)"
+    "modelTooBig": "Datei ist zu groß (max 15 MB)",
+    "imageTooBig": "Bild ist zu groß (max. 8 MB).",
+    "imageLimitReached": "Bildlimit für dieses Objekt erreicht."
   },
   "rePurpose": {
     "title": "Zweck des Reverse Engineerings",
@@ -375,10 +378,11 @@
     "totalDuration": "Gesamtprojektdauer"
   },
   "validation": {
-    "required": "Dieses Feld ist erforderlich",
-    "invalidEmail": "Ungültige E-Mail-Adresse",
-    "invalidPhone": "Ungültige Telefonnummer",
-    "positiveNumber": "Muss eine positive Zahl sein",
-    "maxLength": "Maximale Länge beträgt {{max}} Zeichen"
+    "projectTitleMissing": "Projekttitel fehlt",
+    "contractorMissing": "Auftragnehmerprofil fehlt",
+    "clientMissing": "Kundenprofil fehlt",
+    "objectNameMissing": "Jedes Objekt benötigt einen Namen",
+    "deadlineMissing": "Liefertermin fehlt",
+    "nativeCadSystemMissing": "Natives CAD-System fehlt"
   }
 }

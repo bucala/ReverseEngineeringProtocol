@@ -31,7 +31,7 @@ interface Props {
 export default function ImportDialog({ open, onClose }: Props) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { importProject } = useProjectStore()
+  const { importProject, projects } = useProjectStore()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [file, setFile] = useState<File | null>(null)
@@ -54,9 +54,11 @@ export default function ImportDialog({ open, onClose }: Props) {
     setLoading(true)
     try {
       const payload = await importReproj(file, password)
-      importProject(payload.project)
+      const conflict = projects.some((p) => p.id === payload.project.id)
+      const asCopy = conflict && !window.confirm(t('project.importOverwriteConfirm'))
+      const imported = importProject(payload.project, { asCopy })
       handleClose()
-      navigate(`/projects/${payload.project.id}`)
+      navigate(`/projects/${imported.id}`)
     } catch {
       setError(t('security.incorrectPassword'))
     } finally {

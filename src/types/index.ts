@@ -192,6 +192,19 @@ export interface NativeCadSpec {
 
 export type ProjectStatus = 'draft' | 'in_review' | 'approved' | 'completed' | 'archived'
 
+export interface AuditEntry {
+  id: string
+  at: string
+  action: string
+  details: string
+}
+
+export interface ProjectRevision {
+  version: number
+  savedAt: string
+  summary: string
+}
+
 export interface Project {
   id: string
   protocolNumber: string
@@ -213,6 +226,9 @@ export interface Project {
   ziadatelSignature: string | null     // base64 PNG
   signedAt: string | null
   startDate: string | null
+  version: number
+  auditLog: AuditEntry[]
+  revisions: ProjectRevision[]
 }
 
 // ─── Project Templates ────────────────────────────────────────────────────────
