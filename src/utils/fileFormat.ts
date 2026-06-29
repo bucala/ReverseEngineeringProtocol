@@ -3,6 +3,64 @@ import { encrypt, decrypt } from './crypto'
 
 const REPROJ_VERSION = '1.0'
 const COMPANY_EXPORT_VERSION = '1.0'
+const MAX_IMPORT_SIZE = 50 * 1024 * 1024
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+
+function validateCompanyProfile(value: unknown): CompanyProfile {
+  if (!isRecord(value) || !isString(value.id) || !isString(value.name)) {
+    throw new Error('Invalid company profile')
+  }
+  return {
+    id: value.id,
+    name: value.name,
+    address: isString(value.address) ? value.address : '',
+    city: isString(value.city) ? value.city : '',
+    zip: isString(value.zip) ? value.zip : '',
+    country: isString(value.country) ? value.country : '',
+    ico: isString(value.ico) ? value.ico : '',
+    dic: isString(value.dic) ? value.dic : '',
+    phone: isString(value.phone) ? value.phone : '',
+    email: isString(value.email) ? value.email : '',
+    website: isString(value.website) ? value.website : '',
+    contactPerson: isString(value.contactPerson) ? value.contactPerson : '',
+    logoBase64: isString(value.logoBase64) ? value.logoBase64 : null,
+  }
+}
+
+function validateProject(value: unknown): Project {
+  if (!isRecord(value) || !isString(value.id) || !isString(value.protocolNumber)) {
+    throw new Error('Invalid project structure')
+  }
+  const requiredObjects = ['meshAssessment', 'reCadPostprocessing', 'timeEstimation', 'deliverables', 'nativeCadSpec']
+  for (const key of requiredObjects) {
+    if (!isRecord(value[key])) throw new Error(`Invalid project: missing ${key}`)
+  }
+  if (!Array.isArray(value.objectSpecs) && !isRecord(value.objectSpec)) {
+    throw new Error('Invalid project: missing object specifications')
+  }
+  return value as unknown as Project
+}
+
+function validateReprojPayload(value: unknown): ReprojFilePayload {
+  if (!isRecord(value) || !isString(value.version) || !isRecord(value.project)) {
+    throw new Error('Invalid .reproj file structure')
+  }
+  return {
+    version: value.version,
+    exportedAt: isString(value.exportedAt) ? value.exportedAt : new Date().toISOString(),
+    project: validateProject(value.project),
+    companyProfiles: Array.isArray(value.companyProfiles)
+      ? value.companyProfiles.map(validateCompanyProfile)
+      : [],
+  }
+}
 
 // ─── .reproj (encrypted project) ─────────────────────────────────────────────
 
@@ -26,13 +84,10 @@ export async function importReproj(
   file: File,
   password: string
 ): Promise<ReprojFilePayload> {
+  if (file.size > MAX_IMPORT_SIZE) throw new Error('Import file is too large')
   const buffer = await file.arrayBuffer()
   const json = await decrypt(buffer, password)
-  const payload = JSON.parse(json) as ReprojFilePayload
-  if (!payload.version || !payload.project) {
-    throw new Error('Invalid .reproj file structure')
-  }
-  return payload
+  return validateReprojPayload(JSON.parse(json))
 }
 
 // ─── Company profile JSON export/import ──────────────────────────────────────
@@ -47,11 +102,9 @@ export function exportCompanyProfiles(profiles: CompanyProfile[]): Blob {
 }
 
 export function importCompanyProfiles(json: string): CompanyProfile[] {
-  const data = JSON.parse(json)
-  // Accept plain array
-  if (Array.isArray(data)) return data as CompanyProfile[]
-  // Accept wrapped format: { profiles: [...] } or { version, exportedAt, profiles: [...] }
-  if (data && Array.isArray(data.profiles)) return data.profiles as CompanyProfile[]
+  const data = JSON.parse(json) as unknown
+  if (Array.isArray(data)) return data.map(validateCompanyProfile)
+  if (isRecord(data) && Array.isArray(data.profiles)) return data.profiles.map(validateCompanyProfile)
   throw new Error('Invalid company profiles file')
 }
 
@@ -67,7 +120,7 @@ export function downloadBlob(blob: Blob, filename: string): void {
 }
 
 export function sanitizeFilename(name: string): string {
-  return name.replace(/[^a-zA-Z0-9_\-\.]/g, '_').substring(0, 80)
+  return name.replace(/[^a-zA-Z0-9_\-.]/g, '_').substring(0, 80)
 }
 
 export function readFileAsText(file: File): Promise<string> {

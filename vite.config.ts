@@ -15,7 +15,16 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: process.env.VITE_SOURCEMAP === 'true',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          mui: ['@mui/material', '@mui/icons-material'],
+          three: ['three'],
+          i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+        },
+      },
+    },
   },
   // Tauri expects a fixed port in development
   envPrefix: ['VITE_', 'TAURI_'],

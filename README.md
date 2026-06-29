@@ -93,7 +93,7 @@ npm install
 npm run dev
 ```
 
-Aplikácia bude dostupná na `http://localhost:5173`.
+Aplikácia bude dostupná na `http://localhost:3000`.
 
 ---
 

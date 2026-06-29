@@ -105,13 +105,12 @@ export const defaultNativeCadSpec = (): NativeCadSpec => ({
   notes: '',
 })
 
-export const createDefaultProject = (): Project => {
+export const createDefaultProject = (protocolNumber?: string): Project => {
   const now = new Date().toISOString()
   const year = new Date().getFullYear()
-  const random = Math.floor(Math.random() * 9000) + 1000
   return {
     id: uuidv4(),
-    protocolNumber: `RE-${year}-${random}`,
+    protocolNumber: protocolNumber ?? `RE-${year}-0001`,
     title: '',
     status: 'draft',
     createdAt: now,
@@ -129,5 +128,8 @@ export const createDefaultProject = (): Project => {
     ziadatelSignature: null,
     signedAt: null,
     startDate: null,
+    version: 1,
+    auditLog: [{ id: uuidv4(), at: now, action: 'created', details: 'Project created' }],
+    revisions: [{ version: 1, savedAt: now, summary: 'Initial version' }],
   }
 }
